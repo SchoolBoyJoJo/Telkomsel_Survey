@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Survey Pengguna Telkomsel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -325,9 +326,23 @@
                 thankyou.classList.remove('hidden');
                 setTimeout(() => thankyou.classList.add('show'), 20);
 
-                // --- Kirim ke server dengan fetch/ajax jika ingin ---
-                // fetch('proses.php', { method:'POST', body: new FormData(form) })
-                // atau: fetch('proses.php', { method:'POST', body: JSON.stringify(answers), headers: {'Content-Type':'application/json'}})
+            fetch('/submit-survey', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify(answers)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Survey berhasil disimpan", data);
+            })
+            .catch(error => {
+                console.error("Gagal mengirim survey:", error);
+            });
+
+
             }
         });
 
