@@ -9,21 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-
     public function up()
     {
-        Schema::create('survey_answers', function (Blueprint $table) {
-            $table->id();
-            $table->json('answers'); // Semua jawaban termasuk nomorHp disimpan dalam JSON
-            $table->timestamps();
+        Schema::table('survey_answers', function (Blueprint $table) {
+            $table->string('survey_type')->nullable();
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('survey_answers');
+        Schema::table('survey_answers', function (Blueprint $table) {
+            $table->dropColumn('survey_type');
+        });
     }
 };

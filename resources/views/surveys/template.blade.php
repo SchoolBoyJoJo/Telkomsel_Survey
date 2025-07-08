@@ -326,7 +326,7 @@
                 thankyou.classList.remove('hidden');
                 setTimeout(() => thankyou.classList.add('show'), 20);
 
-            fetch('/submit-survey', {
+            fetch('/template', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
