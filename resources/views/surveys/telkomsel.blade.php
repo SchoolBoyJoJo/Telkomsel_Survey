@@ -81,103 +81,271 @@
         </div>
     </div>
     <script>
+
         // ========== Survey Steps ==========
-        const steps = [{
-                question: "Seberapa sering Anda menggunakan layanan Telkomsel dalam 3 bulan terakhir sebelum berhenti?",
-                name: "frekuensi",
+        const steps = [
+            {
+                question: "Usia Anda (dalam tahun)?",
+                name: "usia",
                 options: [
-                    "Setiap hari",
-                    "Beberapa kali seminggu",
-                    "Sekali seminggu",
-                    "Jarang",
-                    "Tidak pernah"
+                    "< 18",
+                    "18 - 25",
+                    "26 - 35",
+                    "36 - 45",
+                    "46 - 60",
+                    "> 60"
                 ]
             },
             {
-                question: "Berapa besar rata-rata pengeluaran Anda per bulan untuk layanan Telkomsel sebelum berhenti?",
-                name: "pengeluaran",
+                question: "Jenis Kelamin?",
+                name: "jenis_kelamin",
                 options: [
-                    "< Rp20.000",
-                    "Rp20.000 – Rp50.000",
-                    "Rp50.001 – Rp100.000",
-                    "> Rp100.000"
+                    "Laki-laki",
+                    "Perempuan"
                 ]
             },
             {
-                question: "Apa alasan utama Anda tidak lagi menggunakan nomor Telkomsel? (Pilih satu)",
-                name: "alasan",
+                question: "Jenis Tempat Tinggal?",
+                name: "jenis_tempat_tinggal",
                 options: [
-                    "Harga paket terlalu mahal",
-                    "Jaringan kurang stabil",
-                    "Paket internet tidak sesuai kebutuhan",
-                    "Beralih ke provider lain yang lebih murah",
-                    "Tidak ada promo menarik",
-                    "Layanan pelanggan kurang memuaskan",
-                    "Alasan pribadi"
+                    "Kontrakan",
+                    "Rumah Sendiri",
+                    "Apartemen",
+                    "Kos"
                 ]
             },
             {
-                question: "Apakah Anda merasa benefit/promo dari Telkomsel cukup menarik dibandingkan provider lain?",
-                name: "promo",
+                question: "Status Pekerjaan Anda saat ini?",
+                name: "status_pekerjaan",
                 options: [
-                    "Sangat tidak menarik",
-                    "Tidak menarik",
-                    "Netral",
-                    "Menarik",
-                    "Sangat menarik"
+                    "Tidak Bekerja",
+                    "Pelajar/Mahasiswa",
+                    "Pekerja",
+                    "Wirausaha"
                 ]
             },
             {
-                question: "Apakah Anda mengalami kesulitan saat membeli paket data atau pulsa Telkomsel?",
-                name: "kesulitan",
+                question: "Berapa total pendapatan pribadi Anda per bulan?",
+                name: "pendapatan",
                 options: [
-                    "Sering",
-                    "Kadang-kadang",
-                    "Tidak pernah"
+                    "< Rp 1.000.000",
+                    "Rp 1.000.000 – Rp 4.999.999",
+                    "Rp 5.000.000 – Rp 7.999.999",
+                    "Rp 8.000.000 – Rp 14.999.999",
+                    "≥ Rp 15.000.000"
                 ]
             },
             {
-                question: "Seberapa puas Anda dengan kualitas jaringan Telkomsel di lokasi utama Anda (rumah/kantor)?",
-                name: "jaringan",
-                options: [
-                    "Sangat tidak puas",
-                    "Tidak puas",
-                    "Netral",
-                    "Puas",
-                    "Sangat puas"
-                ]
-            },
-            {
-                question: "Apakah Anda menerima informasi promo atau penawaran dari Telkomsel secara berkala?",
-                name: "info_promo",
-                options: [
-                    "Ya, sering",
-                    "Kadang-kadang",
-                    "Tidak pernah"
-                ]
-            },
-            {
-                question: "Setelah berhenti menggunakan Telkomsel, apakah Anda berpindah ke provider lain? Jika ya, ke mana?",
-                name: "pindah",
-                options: [
-                    "Tidak pindah",
-                    "Indosat",
-                    "XL/Axis",
-                    "Tri",
-                    "Smartfren",
-                    "Lainnya"
-                ],
-                withOther: true
-            },
-            {
-                question: "Apakah Anda bersedia kembali menggunakan Telkomsel di masa depan?",
-                name: "kembali",
+                question: "Apakah saat ini Anda masih aktif menggunakan Telkomsel untuk membeli pulsa dan kuota internet?",
+                name: "aktif_telkomsel",
                 options: [
                     "Ya",
-                    "Tidak",
-                    "Mungkin"
+                    "Tidak"
                 ]
+            },
+            {
+                question: "Apakah saat ini Anda menggunakan lebih dari 1 kartu SIM (Multisimer)?",
+                name: "multisimer",
+                options: [
+                    "Ya",
+                    "Tidak"
+                ]
+            },
+            {
+                question: "Jika Anda Multisimer, apa kartu SIM kedua yang saat ini Anda pakai?",
+                name: "sim_kedua",
+                options: [
+                    "Bukan Multisimer",
+                    "Telkomsel",
+                    "IM3",
+                    "Tri",
+                    "XL",
+                    "Axis",
+                    "Smartfren",
+                    "Other:"
+                ],
+                withOther: true,
+                otherValues: ["Other:"]
+            },
+            {
+                question: "Apakah di rumah Anda ada jaringan WiFi?",
+                name: "wifi_rumah",
+                options: [
+                    "Ya",
+                    "Tidak"
+                ]
+            },
+            {
+                question: "Jika Anda memakai WiFi di rumah, apa provider jaringan WiFi yang Anda pakai saat ini?",
+                name: "provider_wifi",
+                options: [
+                    "Tidak ada WiFi",
+                    "Indihome",
+                    "Biznet",
+                    "MyRepublic",
+                    "First Media",
+                    "IconNet",
+                    "MNC Play",
+                    "XL Home",
+                    "Other:"
+                ],
+                withOther: true,
+                otherValues: ["Other:"]
+            },
+            {
+                question: "Apakah saat di luar Anda lebih sering menggunakan WiFi publik dibanding data seluler?",
+                name: "wifi_vs_data_luar",
+                options: [
+                    "Ya",
+                    "Tidak"
+                ]
+            },
+            {
+                question: "Berapa lama rata-rata Anda menggunakan WiFi publik dalam sehari saat berada di luar rumah?",
+                name: "durasi_wifi_publik",
+                options: [
+                    "Tidak Pernah",
+                    "< 30 Menit",
+                    "30 Menit - 1 Jam",
+                    "1 - 4 Jam",
+                    "4 - 7 Jam",
+                    "> 7 Jam"
+                ]
+            },
+            {
+                question: "Berapa rata-rata Anda bepergian ke luar kota dalam sebulan?",
+                name: "keluar_kota_bulanan",
+                options: [
+                    "0",
+                    "1",
+                    "2",
+                    "3",
+                    "> 3"
+                ]
+            },
+            {
+                question: "Apakah di keluarga Anda mayoritas memakai Telkomsel?",
+                name: "keluarga_telkomsel",
+                options: [
+                    "Ya",
+                    "Tidak"
+                ]
+            },
+            {
+                question: "Apakah Anda rutin melakukan aktivitas yang membutuhkan koneksi internet stabil seperti gaming atau streaming?",
+                name: "aktifitas_internet_berat",
+                options: [
+                    "Ya",
+                    "Tidak"
+                ]
+            },
+            {
+                question: "Apa jenis paket internet yang biasa Anda beli?",
+                name: "jenis_paket",
+                options: [
+                    "Harian",
+                    "Mingguan",
+                    "Bulanan"
+                ]
+            },
+            {
+                question: "Dari mana biasanya Anda membeli paket internet?",
+                name: "sumber_pembelian_paket",
+                options: [
+                    "Outlet / Konter",
+                    "UMB (*123#, *363#, *808#, dll)",
+                    "Apps Provider (MyTelkomsel, myXL, myIM3, dll)",
+                    "Minimarket (Indomaret, Alfamart, dll)",
+                    "Lainnya"
+                ],
+                withOther: true,
+                otherValues: ["Lainnya"]
+            },
+            {
+                question: "Bagaimana Anda menilai kualitas layanan Telkomsel secara keseluruhan?",
+                name: "penilaian_kualitas_telkomsel",
+                type: "scale",
+                scale: {
+                    minLabel: "Sangat Buruk",
+                    maxLabel: "Sangat Baik",
+                    values: [1, 2, 3, 4, 5]
+                }
+            },
+            {
+                question: "Seberapa sering Anda mengalami gangguan sinyal atau panggilan saat memakai Telkomsel?",
+                name: "frekuensi_gangguan",
+                type: "scale",
+                scale: {
+                    minLabel: "Sangat Jarang",
+                    maxLabel: "Sangat Sering",
+                    values: [1, 2, 3, 4, 5]
+                }
+            },
+            {
+                question: "Seberapa mudah Anda membeli produk atau paket Telkomsel?",
+                name: "kemudahan_beli_telkomsel",
+                type: "scale",
+                scale: {
+                    minLabel: "Sangat Mudah",
+                    maxLabel: "Sangat Sulit",
+                    values: [1, 2, 3, 4, 5]
+                }
+            },
+            {
+                question: "Berapa maksimal harga paket internet bulanan Telkomsel yang masih Anda anggap wajar?",
+                name: "harga_paket_wajar",
+                options: [
+                    "Di bawah Rp 50.000",
+                    "Rp 50.000 – Rp 100.000",
+                    "Rp 100.000 – Rp 150.000",
+                    "Rp 150.000 – Rp 200.000",
+                    "Lebih dari Rp 200.000"
+                ]
+            },
+            {
+                question: "Menurut Anda, apakah harga layanan Telkomsel sepadan dengan manfaat yang Anda dapatkan?",
+                name: "sepadan_harga_telkomsel",
+                type: "scale",
+                scale: {
+                    minLabel: "Sangat Tidak Sepadan",
+                    maxLabel: "Sangat Sepadan",
+                    values: [1, 2, 3, 4, 5]
+                }
+            },
+            {
+                question: "Apakah Anda tertarik dengan promo dari provider selain Telkomsel?",
+                name: "tertarik_promo_lain",
+                options: [
+                    "Ya",
+                    "Tidak"
+                ]
+            },
+            {
+                question: "Menurut Anda, seberapa mudah Anda untuk pindah ke provider lain?",
+                name: "kemudahan_pindah_provider",
+                type: "scale",
+                scale: {
+                    minLabel: "Sangat Sulit",
+                    maxLabel: "Sangat Mudah",
+                    values: [1, 2, 3, 4, 5]
+                }
+            },
+            {
+                question: "Menurut Anda, apakah tarif layanan Telkomsel lebih mahal dibandingkan provider lain?",
+                name: "mahal_dibandingkan",
+                type: "scale",
+                scale: {
+                    minLabel: "Jauh Lebih Murah",
+                    maxLabel: "Jauh Lebih Mahal",
+                    values: [1, 2, 3, 4, 5]
+                }
+            },
+            {
+                question: "Tambahkan saran dan keluhan lain selama Anda menggunakan Telkomsel jika ada.",
+                name: "saran_telkomsel",
+                type: "text"
             }
+
         ];
 
         let currentStep = 0;
@@ -240,51 +408,92 @@
         function renderStep() {
             renderProgress();
             const step = steps[currentStep];
-            let html = `
-                <div class="fade-in px-2">
-                  <div class="text-2xl font-bold text-gray-800 mb-8">${step.question}</div>
-                  <div class="flex flex-col gap-4">
-              `;
-            step.options.forEach((opt, idx) => {
-                if (step.withOther && opt === "Lainnya") {
+            const name = step.name;
+            let html = `<div class="fade-in px-2">
+                <div class="text-2xl font-bold text-gray-800 mb-8">${step.question}</div>`;
+
+            // ======== Cek jika type: 'scale' (skala Likert) ========
+            if (step.type === 'scale') {
+                html += `
+                    <div class="flex items-center justify-between px-2 mb-2 text-sm text-gray-500">
+                        <span>${step.scale.minLabel}</span>
+                        <span>${step.scale.maxLabel}</span>
+                    </div>
+                    <div class="flex justify-between gap-2">
+                `;
+                step.scale.values.forEach(val => {
                     html += `
-                        <label class="flex items-center gap-3 py-3 px-4 rounded-2xl border border-gray-200 hover:border-red-400 transition cursor-pointer bg-gray-50">
-                          <input type="radio" name="${step.name}" value="Lainnya" class="accent-red-500 w-6 h-6" id="lainnyaRadio">
-                          <span>Lainnya:</span>
-                          <input type="text" name="${step.name}_lainnya" id="lainnyaInput" class="ml-0 border-b border-gray-300 px-2 py-1 w-36 focus:outline-none focus:border-red-500 transition-all bg-transparent" style="display:none;" placeholder="Isi provider lain">
+                        <label class="flex flex-col items-center gap-2">
+                            <input type="radio" name="${name}" value="${val}" class="accent-red-500 w-6 h-6" ${answers[name]==val ? 'checked' : ''}>
+                            <span class="text-sm">${val}</span>
                         </label>
-                      `;
-                } else {
-                    html += `
-                      <label class="flex items-center gap-3 py-3 px-4 rounded-2xl border border-gray-200 hover:border-red-400 transition cursor-pointer bg-gray-50">
-                        <input type="radio" name="${step.name}" value="${opt}" class="accent-red-500 w-6 h-6" ${answers[step.name]===opt?'checked':''}>
-                        <span class="text-lg">${opt}</span>
-                      </label>`;
-                }
-            });
-            html += `</div></div>`;
+                    `;
+                });
+                html += `</div>`;
+            }
+            else if (step.type === "text") {
+                html += `
+                    <div class="w-full">
+                        <textarea name="${name}" rows="5" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-red-500 focus:outline-none text-lg transition-all resize-none" placeholder="Tuliskan saran atau keluhan Anda...">${answers[name] || ''}</textarea>
+                    </div>
+                `;
+            }
+            // ======== Pertanyaan biasa / opsi biasa ========
+            else {
+                html += `<div class="flex flex-col gap-4">`;
+                step.options.forEach(opt => {
+                    const isOther = step.withOther && (step.otherValues || ["Lainnya"]).includes(opt);
+                    if (isOther) {
+                        html += `
+                            <label class="flex items-center gap-3 py-3 px-4 rounded-2xl border border-gray-200 hover:border-red-400 transition cursor-pointer bg-gray-50">
+                                <input type="radio" name="${name}" value="Lainnya" class="accent-red-500 w-6 h-6" id="lainnyaRadio_${name}">
+                                <span>${opt}</span>
+                                <input type="text" name="${name}_lainnya" id="lainnyaInput_${name}" class="ml-0 border-b border-gray-300 px-2 py-1 w-36 focus:outline-none focus:border-red-500 transition-all bg-transparent" style="display:none;" placeholder="Isi jawaban lainnya">
+                            </label>
+                        `;
+                    } else {
+                        html += `
+                            <label class="flex items-center gap-3 py-3 px-4 rounded-2xl border border-gray-200 hover:border-red-400 transition cursor-pointer bg-gray-50">
+                                <input type="radio" name="${name}" value="${opt}" class="accent-red-500 w-6 h-6" ${answers[name] === opt ? 'checked' : ''}>
+                                <span class="text-lg">${opt}</span>
+                            </label>
+                        `;
+                    }
+                });
+                html += `</div>`;
+            }
+
+            html += `</div>`;
             stepContent.innerHTML = html;
             setTimeout(() => stepContent.firstElementChild.classList.add('show'), 20);
-            // "Lainnya" JS
+
+            // Handle Lainnya jika ada
             if (step.withOther) handleLainnya();
-            // Back btn
+
+            // Back dan Next Button
             backBtn.style.visibility = currentStep === 0 ? 'hidden' : 'visible';
-            // Next btn
             nextBtn.innerHTML = currentStep === steps.length - 1 ? '<span class="text-lg font-semibold">Kirim</span>' : '&#8594;';
         }
 
         function handleLainnya() {
-            const lainnyaRadio = document.getElementById('lainnyaRadio');
-            const lainnyaInput = document.getElementById('lainnyaInput');
-            if (!lainnyaRadio) return;
-            // Restore value
-            if (answers['pindah'] === 'Lainnya') {
+            const step = steps[currentStep];
+            const name = step.name;
+            const radioId = `lainnyaRadio_${name}`;
+            const inputId = `lainnyaInput_${name}`;
+            const lainnyaRadio = document.getElementById(radioId);
+            const lainnyaInput = document.getElementById(inputId);
+            const isOther = (step.otherValues || ["Lainnya"]).includes(answers[step.name]);
+            if (!lainnyaRadio || !lainnyaInput) return;
+
+            // Restore value jika sebelumnya diisi
+            if (answers[name] === 'Lainnya') {
                 lainnyaInput.style.display = 'inline-block';
-                lainnyaInput.value = answers['pindah_lainnya'] || '';
+                lainnyaInput.value = answers[`${name}_lainnya`] || '';
                 lainnyaRadio.checked = true;
             }
-            document.querySelectorAll('input[name="pindah"]').forEach(radio => {
-                radio.addEventListener('change', function() {
+
+            document.querySelectorAll(`input[name="${name}"]`).forEach(radio => {
+                radio.addEventListener('change', () => {
                     if (lainnyaRadio.checked) {
                         lainnyaInput.style.display = 'inline-block';
                         lainnyaInput.required = true;
@@ -298,13 +507,68 @@
             });
         }
 
+        function submitSurvey() {
+            surveyForm.classList.add('hidden');
+            surveyForm.style.display = 'none';
+            thankyou.classList.remove('hidden');
+            setTimeout(() => thankyou.classList.add('show'), 20);
+
+            fetch('/template', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify(answers)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Survey berhasil disimpan", data);
+            })
+            .catch(error => {
+                console.error("Gagal mengirim survey:", error);
+            });
+        }
+
         nextBtn.addEventListener('click', () => {
             const step = steps[currentStep];
+
+            // === Handle type: text ===
+            if (step.type === "text") {
+                const input = surveyForm.querySelector(`textarea[name="${step.name}"]`);
+                const value = input?.value.trim();
+                if (!value) {
+                    input.classList.add('ring-2', 'ring-red-300');
+                    setTimeout(() => input.classList.remove('ring-2', 'ring-red-300'), 700);
+                    return;
+                }
+                answers[step.name] = value;
+
+                if (currentStep < steps.length - 1) {
+                    currentStep++;
+                    renderStep();
+                } else {
+                    submitSurvey(); // <- Ini yang wajib dipanggil kalau step terakhir
+                }
+                return;
+            }
+
             const selected = surveyForm.querySelector(`input[name="${step.name}"]:checked`);
             let valid = !!selected;
-            if (step.withOther && selected && selected.value === "Lainnya") {
-                const lainnyaInput = document.getElementById('lainnyaInput');
-                if (!lainnyaInput.value.trim()) valid = false;
+            const isOther = step.withOther && (step.otherValues || ["Lainnya"]).includes(selected.value);
+            if (step.type === "text") {
+                const input = surveyForm.querySelector(`textarea[name="${step.name}"]`);
+                const value = input?.value.trim();
+                if (!value) {
+                    input.classList.add('ring-2', 'ring-red-300');
+                    setTimeout(() => input.classList.remove('ring-2', 'ring-red-300'), 700);
+                    return;
+                }
+                answers[step.name] = value;
+            }
+            if (isOther) {
+                const lainnyaInput = document.getElementById(`lainnyaInput_${step.name}`);
+                if (!lainnyaInput || !lainnyaInput.value.trim()) valid = false;
             }
             if (!valid) {
                 stepContent.firstElementChild.classList.remove('show');
@@ -315,7 +579,10 @@
             }
             answers[step.name] = selected.value;
             if (step.withOther && selected.value === "Lainnya") {
-                answers[`${step.name}_lainnya`] = document.getElementById('lainnyaInput').value.trim();
+                answers[`${step.name}_lainnya`] = document.getElementById(`lainnyaInput_${step.name}`).value.trim();
+            }
+            if (isOther) {
+            answers[`${step.name}_lainnya`] = document.getElementById(`lainnyaInput_${step.name}`).value.trim();
             }
             if (currentStep < steps.length - 1) {
                 currentStep++;
@@ -326,7 +593,7 @@
                 thankyou.classList.remove('hidden');
                 setTimeout(() => thankyou.classList.add('show'), 20);
 
-            fetch('/telkomsel', {
+            fetch('/template', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -357,12 +624,13 @@
                         const radio = surveyForm.querySelector(`input[name="${step.name}"][value="${selectedVal}"]`);
                         if (radio) radio.checked = true;
                     }
-                    if (step.withOther && selectedVal === "Lainnya") {
-                        const lainnyaInput = document.getElementById('lainnyaInput');
-                        if (lainnyaInput) {
-                            lainnyaInput.value = answers[`${step.name}_lainnya`] || '';
+                        if (step.withOther && selectedVal === "Lainnya") {
+                            const lainnyaInput = document.getElementById(`lainnyaInput_${step.name}`);
+                            if (lainnyaInput) {
+                                lainnyaInput.value = answers[`${step.name}_lainnya`] || '';
+                                lainnyaInput.style.display = 'inline-block'; // Optional: biar muncul juga pas kembali
+                            }
                         }
-                    }
                 }, 100);
             }
         });
