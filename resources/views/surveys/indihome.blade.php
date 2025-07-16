@@ -94,14 +94,8 @@
             {
                 question: "Usia Anda (tahun)?",
                 name: "usia",
-                options: [
-                    "< 18",
-                    "18 - 25",
-                    "26 - 35",
-                    "36 - 45",
-                    "46 - 60",
-                    "> 60"
-                ]
+                type: "number",
+                placeholder: "Contoh: 21"
             },
             {
                 question: "Status pekerjaan Anda saat ini?",
@@ -116,6 +110,7 @@
             {
                 question: "Berapa pendapatan Anda per bulan?",
                 name: "pendapatan",
+                note: "Jika belum memiliki pendapatan, pilih *Kurang dari Rp1.000.000*.",
                 options: [
                     "Kurang dari Rp1.000.000",
                     "Rp1.000.000 - Rp3.000.000",
@@ -361,8 +356,13 @@
             renderProgress();
             const step = steps[currentStep];
             const name = step.name;
-            let html = `<div class="fade-in px-2">
-                <div class="text-2xl font-bold text-gray-800 mb-8">${step.question}</div>`;
+            let html = `<div class="fade-in px-2">`;
+
+            html += `<div class="text-2xl font-bold text-gray-800 mb-2">${step.question}</div>`;
+
+            if (step.note) {
+                html += `<div class="text-sm text-gray-500 italic mb-6">${step.note}</div>`;
+            }
 
             // ======== Cek jika type: 'scale' (skala Likert) ========
             if (step.type === 'scale') {
@@ -383,6 +383,18 @@
                 });
                 html += `</div>`;
             }
+            else if (step.type === 'number') {
+                html += `
+                    <input 
+                        type="number" 
+                        name="${name}" 
+                        placeholder="${step.placeholder || ''}" 
+                        class="w-full px-5 py-3 rounded-xl border border-gray-300 focus:border-red-500 focus:outline-none text-lg transition-all"
+                        value="${answers[name] || ''}"
+                    />
+                `;
+            }
+
 
             // ======== Pertanyaan biasa / opsi biasa ========
             else {
@@ -454,57 +466,68 @@
         }
 
         
-        nextBtn.addEventListener('click', () => {
-            const step = steps[currentStep];
-            const selected = surveyForm.querySelector(`input[name="${step.name}"]:checked`);
-            let valid = !!selected;
-            const isOther = step.withOther && (step.otherValues || ["Lainnya"]).includes(selected.value);
-            if (isOther) {
-                const lainnyaInput = document.getElementById(`lainnyaInput_${step.name}`);
-                if (!lainnyaInput || !lainnyaInput.value.trim()) valid = false;
-            }
-            if (!valid) {
-                stepContent.firstElementChild.classList.remove('show');
-                setTimeout(() => stepContent.firstElementChild.classList.add('show'), 100);
-                stepContent.firstElementChild.classList.add('ring-2', 'ring-red-300');
-                setTimeout(() => stepContent.firstElementChild.classList.remove('ring-2', 'ring-red-300'), 700);
-                return;
-            }
-            answers[step.name] = selected.value;
-            if (step.withOther && selected.value === "Lainnya") {
-                answers[`${step.name}_lainnya`] = document.getElementById(`lainnyaInput_${step.name}`).value.trim();
-            }
-            if (isOther) {
+nextBtn.addEventListener('click', () => {
+    const step = steps[currentStep];
+    let selected;
+    let valid = false;
+
+    if (step.type === 'number') {
+        selected = surveyForm.querySelector(`input[name="${step.name}"]`);
+        const value = selected.value.trim();
+        const numericValue = Number(value);
+        valid = value !== '' && !isNaN(numericValue) && numericValue > 0;
+    } else {
+        selected = surveyForm.querySelector(`input[name="${step.name}"]:checked`);
+        valid = !!selected;
+        if (step.withOther && selected && (step.otherValues || ["Lainnya"]).includes(selected.value)) {
+            const lainnyaInput = document.getElementById(`lainnyaInput_${step.name}`);
+            if (!lainnyaInput || !lainnyaInput.value.trim()) valid = false;
+        }
+    }
+
+    if (!valid) {
+        stepContent.firstElementChild.classList.remove('show');
+        setTimeout(() => stepContent.firstElementChild.classList.add('show'), 100);
+        stepContent.firstElementChild.classList.add('ring-2', 'ring-red-300');
+        setTimeout(() => stepContent.firstElementChild.classList.remove('ring-2', 'ring-red-300'), 700);
+        return;
+    }
+
+    if (step.type === 'number') {
+        answers[step.name] = selected.value.trim();
+    } else {
+        answers[step.name] = selected.value;
+        if (step.withOther && selected.value === "Lainnya") {
             answers[`${step.name}_lainnya`] = document.getElementById(`lainnyaInput_${step.name}`).value.trim();
-            }
-            if (currentStep < steps.length - 1) {
-                currentStep++;
-                renderStep();
-            } else {
-                surveyForm.classList.add('hidden');
-                surveyForm.style.display = 'none'; // <-- tambahan agar benar-benar hilang
-                thankyou.classList.remove('hidden');
-                setTimeout(() => thankyou.classList.add('show'), 20);
+        }
+    }
 
-            fetch('/indihome', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify(answers)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Survey berhasil disimpan", data);
-            })
-            .catch(error => {
-                console.error("Gagal mengirim survey:", error);
-            });
+    if (currentStep < steps.length - 1) {
+        currentStep++;
+        renderStep();
+    } else {
+        surveyForm.classList.add('hidden');
+        surveyForm.style.display = 'none';
+        thankyou.classList.remove('hidden');
+        setTimeout(() => thankyou.classList.add('show'), 20);
 
-
-            }
+        fetch('/indihome', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify(answers)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Survey berhasil disimpan", data);
+        })
+        .catch(error => {
+            console.error("Gagal mengirim survey:", error);
         });
+    }
+});
 
         backBtn.addEventListener('click', () => {
             if (currentStep > 0) {

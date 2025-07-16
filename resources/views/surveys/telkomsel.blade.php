@@ -87,14 +87,7 @@
             {
                 question: "Usia Anda (dalam tahun)?",
                 name: "usia",
-                options: [
-                    "< 18",
-                    "18 - 25",
-                    "26 - 35",
-                    "36 - 45",
-                    "46 - 60",
-                    "> 60"
-                ]
+                type: "number"
             },
             {
                 question: "Jenis Kelamin?",
@@ -127,6 +120,7 @@
             {
                 question: "Berapa total pendapatan pribadi Anda per bulan?",
                 name: "pendapatan",
+                note: "Jika belum memiliki penghasilan, pilih < Rp 1.000.000",
                 options: [
                     "< Rp 1.000.000",
                     "Rp 1.000.000 – Rp 4.999.999",
@@ -410,7 +404,13 @@
             const step = steps[currentStep];
             const name = step.name;
             let html = `<div class="fade-in px-2">
-                <div class="text-2xl font-bold text-gray-800 mb-8">${step.question}</div>`;
+                <div class="text-2xl font-bold text-gray-800 mb-2">${step.question}</div>`;
+
+            if (step.note) {
+                html += `<div class="text-sm text-gray-500 italic mb-6">${step.note}</div>`;
+            } else {
+                html += `<div class="mb-6"></div>`; // spacing normal jika tidak ada note
+            }
 
             // ======== Cek jika type: 'scale' (skala Likert) ========
             if (step.type === 'scale') {
@@ -438,6 +438,16 @@
                     </div>
                 `;
             }
+            else if (step.type === "number") {
+                html += `
+                    <div class="w-full">
+                        <input type="number" name="${name}" value="${answers[name] || ''}" 
+                            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-red-500 focus:outline-none text-lg transition-all" 
+                            placeholder="Masukkan usia Anda">
+                    </div>
+                `;
+            }
+
             // ======== Pertanyaan biasa / opsi biasa ========
             else {
                 html += `<div class="flex flex-col gap-4">`;
@@ -552,6 +562,30 @@
                 }
                 return;
             }
+
+            else if (step.type === "number") {
+                const input = surveyForm.querySelector(`input[name="${step.name}"]`);
+                const value = input?.value.trim();
+
+                // Validasi dasar: angka dan rentang wajar
+                const usia = parseInt(value);
+                if (!value || isNaN(usia) || usia < 0 || usia > 120) {
+                    input.classList.add('ring-2', 'ring-red-300');
+                    setTimeout(() => input.classList.remove('ring-2', 'ring-red-300'), 700);
+                    return;
+                }
+
+                answers[step.name] = usia;
+
+                if (currentStep < steps.length - 1) {
+                    currentStep++;
+                    renderStep();
+                } else {
+                    submitSurvey();
+                }
+                return;
+            }
+
 
             const selected = surveyForm.querySelector(`input[name="${step.name}"]:checked`);
             let valid = !!selected;
