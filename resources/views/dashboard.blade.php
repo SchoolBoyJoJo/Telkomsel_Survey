@@ -6,12 +6,21 @@
     </x-slot>
 
     <div class="p-6 text-gray-900">
-        <form method="GET" action="{{ route('dashboard') }}" class="mb-4">
-            <label for="survey_type" class="block mb-2 font-semibold">Pilih Tipe Survey:</label>
-            <select name="survey_type" id="survey_type" onchange="this.form.submit()" class="p-2 border rounded">
-                <option value="telkomsel" {{ $selectedType == 'telkomsel' ? 'selected' : '' }}>Survey Telkomsel</option>
-                <option value="indihome" {{ $selectedType == 'indihome' ? 'selected' : '' }}>Survey Indihome</option>
-            </select>
+        {{-- Form Filter dan Download --}}
+        <form method="GET" action="{{ route('dashboard') }}" class="mb-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+            <div>
+                <label for="survey_type" class="block mb-1 font-semibold">Pilih Tipe Survey:</label>
+                <select name="survey_type" id="survey_type" class="p-2 border rounded w-full">
+                    <option value="telkomsel" {{ $selectedType == 'telkomsel' ? 'selected' : '' }}>Survey Telkomsel</option>
+                    <option value="indihome" {{ $selectedType == 'indihome' ? 'selected' : '' }}>Survey Indihome</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Tampilkan Data</button>
+            </div>
+            <div>
+                <a href="{{ route('dashboard.download', ['survey_type' => $selectedType]) }}" class="w-full inline-block bg-green-500 hover:bg-green-600 text-white text-center py-2 px-4 rounded">Download Data</a>
+            </div>
         </form>
 
         <div class="overflow-x-auto bg-white p-4 rounded shadow">
