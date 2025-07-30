@@ -11,17 +11,36 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        // Ambil jenis survey dari query string, default 'telkomsel'
         $surveyType = $request->get('survey_type', 'telkomsel');
 
-        // Ambil data survey berdasarkan jenisnya
-        $surveys = SurveyAnswer::where('survey_type', $surveyType)
+        // Ambil data survey berdasarkan tipe
+        $rawSurveys = SurveyAnswer::where('survey_type', $surveyType)
             ->latest()
-            ->paginate(10);
+            ->get();
+
+        // Decode JSON 'answers' ke array dan tambahkan created_at
+        $decodedSurveys = $rawSurveys->map(function ($item) {
+            $decoded = json_decode($item->answers, true);
+            $decoded['created_at'] = $item->created_at;
+            return $decoded;
+        });
+
+        // Data usia untuk grafik
+        $usiaCounts = $decodedSurveys->pluck('usia')->countBy()->sortKeys();
+
+        // Ambil semua saran_telkomsel (hanya yang tidak kosong)
+        $saranTelkomsel = $decodedSurveys
+            ->pluck('saran_telkomsel')
+            ->filter(function ($value) {
+                return !empty($value);
+            })
+            ->values();
 
         return view('dashboard', [
-            'surveys' => $surveys,
-            'selectedType' => $surveyType
+            'decodedSurveys' => $decodedSurveys,
+            'usiaCounts'     => $usiaCounts,
+            'selectedType'   => $surveyType,
+            'saranTelkomsel' => $saranTelkomsel
         ]);
     }
 
@@ -33,7 +52,7 @@ class DashboardController extends Controller
         $surveys = SurveyAnswer::where('survey_type', $surveyType)->get();
 
         $headers = [
-            'Content-Type' => 'text/csv',
+            'Content-Type'        => 'text/csv',
             'Content-Disposition' => "attachment; filename=\"$fileName\"",
         ];
 
