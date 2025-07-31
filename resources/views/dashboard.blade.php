@@ -23,8 +23,10 @@
             </div>
         </form>
 
+    @if ($selectedType === 'telkomsel')
+
         {{-- Grafik Usia --}}
-        @if ($selectedType === 'telkomsel' && isset($usiaCounts) && count($usiaCounts))
+        @if (isset($usiaCounts) && count($usiaCounts))
             <div class="bg-white p-4 mb-6 rounded shadow">
                 <h2 class="text-lg font-semibold mb-4">Distribusi Usia Responden</h2>
                 <canvas id="usiaChart" width="400" height="150"></canvas>
@@ -321,6 +323,257 @@
             </p>
         @endif
     </div>
+    
+    @endif
+
+    @if ($selectedType === 'indihome')
+
+        {{-- Grafik Usia --}}
+        @if (isset($usiaCounts) && count($usiaCounts))
+            <div class="bg-white p-4 mb-6 rounded shadow">
+                <h2 class="text-lg font-semibold mb-4">Distribusi Usia Responden</h2>
+                <canvas id="usiaChart" width="400" height="150"></canvas>
+            </div>
+
+            {{-- Chart.js CDN --}}
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+            <script>
+                const usiaLabels = @json($usiaCounts->keys());
+                const usiaData = @json($usiaCounts->values());
+
+                const ctx = document.getElementById('usiaChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: usiaLabels,
+                        datasets: [{
+                            label: 'Jumlah Responden',
+                            data: usiaData,
+                            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Jumlah Responden'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Usia'
+                                }
+                            }
+                        }
+                    }
+                });
+            </script>
+        @else
+            <div class="bg-white p-4 rounded shadow text-gray-600">
+                <p class="text-center">Belum ada data usia yang tersedia untuk ditampilkan.</p>
+            </div>
+        @endif
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+
+        <!-- Jenis Kelamin -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Jenis Kelamin</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartJenisKelamin" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- Jenis Tempat Tinggal -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Jenis Tempat Tinggal</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartTempatTinggal" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- Status Pekerjaan -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Status Pekerjaan</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartPekerjaan" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+
+        <!-- Pendapatan -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Pendapatan Pribadi</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartPendapatan" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- Aktif Telkomsel -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah Aktif Menggunakan Telkomsel?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartAktifTelkomsel" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- Multisimer -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah Multisimer?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartMultisimer" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+
+        <!-- sim kedua -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Sim Kedua</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartSimKedua" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- wifi rumah -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah Ada Wifi Di Rumah?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartWifiRumah" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- provider wifi -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Provider Wifi</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartProviderWifi" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+
+        <!-- wifi vs data luar -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah Saat Diluar Lebih Sering Menggunakan Wifi Dibanding Data?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartWifiVsDataLuar" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- durasi wifi publik -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Rata - Rata Penggunaan Wifi Publik</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartDurasiWifiPublik" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- keluar kota -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Rata - Rata Keluar Kota Dalam Sebluan</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartKeluarKotaBulanan" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+
+        <!-- keluarga mayoritas telkomsel -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah keluarga mayoritas telkomsel?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartKeluargaTelkomsel" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- aktivitas rutin internet -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah rutin melakukan aktivitas internet koneksi stabil?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartAktifitasInternetBerat" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- jenis paket yang dibeli -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Jenis paket yang dibeli</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartJenisPaket" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+
+        <!-- beli paket dimana -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Dari mana biasanya membeli paket internet?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartSumberPembelianPaket" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- kualitas pelayanan telkomsel -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Bagaimana anda menilai kualitas layanan telkomsel?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartPenilaianKualitasTelkomsel" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- gangguan sinyal -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Seberapa sering anda mengalami gangguan saat menggunakan telkomsel?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartFrekuensiGangguan" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+    </div>
+    
+    <div class="bg-white rounded-lg shadow p-6 mt-6">
+        <h2 class="text-lg font-semibold mb-4">
+            Saran dan keluhan lain selama Anda menggunakan IndiHome.
+            <span class="text-gray-500 text-sm">(Total : {{ count($saranIndihome) }})</span>
+        </h2>
+        
+        @if(isset($saranIndihome) && count($saranIndihome))
+            <div class="max-h-72 overflow-y-auto pr-2">
+                <ul class="space-y-3">
+                    @foreach($saranIndihome as $saran)
+                        <li class="border-b pb-2 text-gray-800">
+                            {{ $saran }}
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        @else
+            <p class="text-gray-500 italic">
+                Belum ada saran atau kritik yang diberikan.
+            </p>
+        @endif
+    </div>
+
+        
+
+    @endif
 
 
     <script>
