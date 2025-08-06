@@ -23,6 +23,10 @@
             </div>
         </form>
 
+    {{-- Chart.js CDN --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
     @if ($selectedType === 'telkomsel')
 
         {{-- Grafik Usia --}}
@@ -32,9 +36,6 @@
                 <canvas id="usiaChart" width="400" height="150"></canvas>
             </div>
 
-            {{-- Chart.js CDN --}}
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
             <script>
                 const usiaLabels = @json($usiaCounts->keys());
                 const usiaData = @json($usiaCounts->values());
@@ -335,9 +336,6 @@
                 <canvas id="usiaChart" width="400" height="150"></canvas>
             </div>
 
-            {{-- Chart.js CDN --}}
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
             <script>
                 const usiaLabels = @json($usiaCounts->keys());
                 const usiaData = @json($usiaCounts->values());
@@ -380,29 +378,29 @@
             </div>
         @endif
 
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
 
         <!-- Jenis Kelamin -->
         <div class="bg-white p-4 rounded shadow">
             <h3 class="text-md font-semibold mb-2 text-center">Jenis Kelamin</h3>
             <div class="flex justify-center items-center">
-                <canvas id="chartJenisKelamin" width="250" height="250"></canvas>
+                <canvas id="chartJenisKelaminIndi" width="250" height="250"></canvas>
             </div>
         </div>
 
-        <!-- Jenis Tempat Tinggal -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Jenis Tempat Tinggal</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartTempatTinggal" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- Status Pekerjaan -->
+        <!-- status pekerjaan -->
         <div class="bg-white p-4 rounded shadow">
             <h3 class="text-md font-semibold mb-2 text-center">Status Pekerjaan</h3>
             <div class="flex justify-center items-center">
-                <canvas id="chartPekerjaan" width="250" height="250"></canvas>
+                <canvas id="chartPekerjaanIndi" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- pendapatan -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Pendapatan Per bulan</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartPendapatanIndi" width="250" height="250"></canvas>
             </div>
         </div>
 
@@ -410,55 +408,27 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
 
-        <!-- Pendapatan -->
+        <!-- indi tempat tinggal -->
         <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Pendapatan Pribadi</h3>
+            <h3 class="text-md font-semibold mb-2 text-center">Status Tempat Tinggal</h3>
             <div class="flex justify-center items-center">
-                <canvas id="chartPendapatan" width="250" height="250"></canvas>
+                <canvas id="chartTempatTinggalIndi" width="250" height="250"></canvas>
             </div>
         </div>
 
         <!-- Aktif Telkomsel -->
         <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Apakah Aktif Menggunakan Telkomsel?</h3>
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah masih berlangganan Indihome?</h3>
             <div class="flex justify-center items-center">
-                <canvas id="chartAktifTelkomsel" width="250" height="250"></canvas>
+                <canvas id="chartAktifIndihome" width="250" height="250"></canvas>
             </div>
         </div>
 
-        <!-- Multisimer -->
+        <!-- wifi vs data indihome -->
         <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Apakah Multisimer?</h3>
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah lebih sering menggunakan wifi dibanding data?</h3>
             <div class="flex justify-center items-center">
-                <canvas id="chartMultisimer" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-
-        <!-- sim kedua -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Sim Kedua</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartSimKedua" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- wifi rumah -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Apakah Ada Wifi Di Rumah?</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartWifiRumah" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- provider wifi -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Provider Wifi</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartProviderWifi" width="250" height="250"></canvas>
+                <canvas id="chartWifiVsDataIndi" width="250" height="250"></canvas>
             </div>
         </div>
 
@@ -466,55 +436,27 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
 
-        <!-- wifi vs data luar -->
+        <!-- alasan wifi vs data -->
         <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Apakah Saat Diluar Lebih Sering Menggunakan Wifi Dibanding Data?</h3>
+            <h3 class="text-md font-semibold mb-2 text-center">Apa alasannya?</h3>
             <div class="flex justify-center items-center">
-                <canvas id="chartWifiVsDataLuar" width="250" height="250"></canvas>
+                <canvas id="chartAlasanWifiVsData" width="250" height="250"></canvas>
             </div>
         </div>
 
-        <!-- durasi wifi publik -->
+        <!-- mudah cari wifi di tempat umum -->
         <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Rata - Rata Penggunaan Wifi Publik</h3>
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah mudah mencari wifi di tempat umum?</h3>
             <div class="flex justify-center items-center">
-                <canvas id="chartDurasiWifiPublik" width="250" height="250"></canvas>
+                <canvas id="chartWifiGratisUmum" width="250" height="250"></canvas>
             </div>
         </div>
 
-        <!-- keluar kota -->
+        <!-- wifi gratis untuk hemat -->
         <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Rata - Rata Keluar Kota Dalam Sebluan</h3>
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah anda sering menggunakan wifi gratis untuk menghemat?</h3>
             <div class="flex justify-center items-center">
-                <canvas id="chartKeluarKotaBulanan" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-
-        <!-- keluarga mayoritas telkomsel -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Apakah keluarga mayoritas telkomsel?</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartKeluargaTelkomsel" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- aktivitas rutin internet -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Apakah rutin melakukan aktivitas internet koneksi stabil?</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartAktifitasInternetBerat" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- jenis paket yang dibeli -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Jenis paket yang dibeli</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartJenisPaket" width="250" height="250"></canvas>
+                <canvas id="chartHematWifiGratis" width="250" height="250"></canvas>
             </div>
         </div>
 
@@ -522,27 +464,99 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
 
-        <!-- beli paket dimana -->
+        <!-- gangguan jaringan wifi -->
         <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Dari mana biasanya membeli paket internet?</h3>
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah anda sering mengalami gangguan jaringan wifi?</h3>
             <div class="flex justify-center items-center">
-                <canvas id="chartSumberPembelianPaket" width="250" height="250"></canvas>
+                <canvas id="chartGangguanWifi" width="250" height="250"></canvas>
             </div>
         </div>
 
-        <!-- kualitas pelayanan telkomsel -->
+        <!-- teknisi datang -->
         <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Bagaimana anda menilai kualitas layanan telkomsel?</h3>
+            <h3 class="text-md font-semibold mb-2 text-center">Berapa lama biasanya teknisi datang setelah melapor?</h3>
             <div class="flex justify-center items-center">
-                <canvas id="chartPenilaianKualitasTelkomsel" width="250" height="250"></canvas>
+                <canvas id="chartResponTeknisi" width="250" height="250"></canvas>
             </div>
         </div>
 
-        <!-- gangguan sinyal -->
+        <!-- waktu teknisi ekspetasi -->
         <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Seberapa sering anda mengalami gangguan saat menggunakan telkomsel?</h3>
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah kedatangan teknisi sudah sesuai dengan ekspektasi?</h3>
             <div class="flex justify-center items-center">
-                <canvas id="chartFrekuensiGangguan" width="250" height="250"></canvas>
+                <canvas id="chartEkspektasiTeknisi" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+
+        <!-- pengaruh teknisi -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah kecepatan teknisi mempengaruhi anda untuk tetap menggunakan layanan?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartPengaruhTeknisi" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- biaya wifi -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Berapa biaya rata-rata untuk bayar layanan wifi setiap bulan?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartBiayaWifi" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- harga wifi sebanding -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Dengan harga tersebut apakah layanan wifi sudah sebanding?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartSebandingWifi" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-6">
+
+        <!-- ekspektasi biaya -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">
+                Berapa ekspektasi biaya yang anda keluarkan untuk layanan internet wifi yang stabil dan cepat?
+            </h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartEkspektasiBiaya" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- ekspektasi kecepatan -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">
+                Berapa kecepatan (Mbps) yang anda harapkan?
+            </h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartEkspektasiKecepatan" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- sumber indihome -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">
+                Bagaimana anda mengetahui tentang layanan Indihome?
+            </h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartSumberIndihome" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- provider terbaik -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">
+                Apa provider terbaik menurut anda saat ini?
+            </h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartProviderTerbaik" width="250" height="250"></canvas>
             </div>
         </div>
 
@@ -571,10 +585,636 @@
         @endif
     </div>
 
-        
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            new Chart(document.getElementById("chartJenisKelaminIndi"), {
+                type: "pie",
+                data: {
+                    labels: ["Laki-laki", "Perempuan"],
+                    datasets: [{
+                        data: [45, 55],
+                        backgroundColor: ["#FF9900", "#3366CC"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartPekerjaanIndi"), {
+                type: "pie",
+                data: {
+                    labels: ["Pelajar/Mahasiswa", "Pegawai", "Wirausaha", "Tidak Bekerja"],
+                    datasets: [{
+                        data: [30, 40, 20, 10],
+                        backgroundColor: ["#FF9900", "#3366CC", "#DC3912", "#109618"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartPendapatanIndi"), {
+                type: "pie",
+                data: {
+                    labels: [
+                        "Kurang dari Rp1.000.000",
+                        "Rp1.000.000 - Rp3.000.000",
+                        "Rp3.000.000 - Rp5.000.000",
+                        "Rp5.000.000 - Rp10.000.000",
+                        "Diatas Rp10.000.000"
+                    ],
+                    datasets: [{
+                        data: [15, 30, 25, 20, 10],
+                        backgroundColor: ["#FF9900", "#3366CC", "#DC3912", "#109618", "#990099"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartTempatTinggalIndi"), {
+                type: "pie",
+                data: {
+                    labels: ["Milik sendiri", "Sewa/Kontrak", "Kos", "Tinggal dengan keluarga"],
+                    datasets: [{
+                        data: [25, 35, 20, 20], // Ganti dengan data dinamis jika tersedia
+                        backgroundColor: ["#FF9900", "#3366CC", "#DC3912", "#109618"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartAktifIndihome"), {
+                type: "pie",
+                data: {
+                    labels: ["Ya", "Tidak"],
+                    datasets: [{
+                        data: [70, 30], // Ganti dengan data dinamis jika tersedia
+                        backgroundColor: ["#3366CC", "#DC3912"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartWifiVsDataIndi"), {
+                type: "pie",
+                data: {
+                    labels: ["Ya", "Tidak"],
+                    datasets: [{
+                        data: [60, 40], // Ganti dengan data dinamis jika tersedia
+                        backgroundColor: ["#3366CC", "#DC3912"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartAlasanWifiVsData"), {
+                type: "pie",
+                data: {
+                    labels: [
+                        "Lebih stabil",
+                        "Lebih murah",
+                        "Tidak punya kuota data",
+                        "Kebiasaan",
+                        "Lainnya"
+                    ],
+                    datasets: [{
+                        data: [30, 25, 15, 20, 10], // Ganti dengan data dinamis jika tersedia
+                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartWifiGratisUmum"), {
+                type: "pie",
+                data: {
+                    labels: ["Ya", "Tidak"],
+                    datasets: [{
+                        data: [70, 30], // Ganti dengan data dinamis jika tersedia
+                        backgroundColor: ["#3366CC", "#DC3912"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartHematWifiGratis"), {
+                type: "bar",
+                data: {
+                    labels: ["1", "2", "3", "4", "5"], 
+                    datasets: [{
+                        data: [4, 8, 15, 12, 6], // Ganti dengan data dinamis jika tersedia
+                        backgroundColor: "#FF9900"
+                    }]
+                },
+                options: {
+                    layout: {
+                        padding: {
+                            top: 30
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: false,
+                            text: "Penggunaan WiFi Gratis untuk Menghemat Kuota"
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            offset: 5,
+                            formatter: Math.round,
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Responden'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Skala Frekuensi (1 = Jarang, 5 = Sering)'
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartGangguanWifi"), {
+                type: "pie",
+                data: {
+                    labels: ["Ya", "Tidak"],
+                    datasets: [{
+                        data: [65, 35], // Ganti dengan data dinamis jika tersedia
+                        backgroundColor: ["#3366CC", "#DC3912"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartResponTeknisi"), {
+                type: "pie",
+                data: {
+                    labels: ["Dalam 2 jam", "2-4 jam", "8-12 jam", "Lebih dari 12 jam"],
+                    datasets: [{
+                        data: [20, 35, 25, 20], // Ganti dengan data dinamis jika tersedia
+                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartEkspektasiTeknisi"), {
+                type: "bar",
+                data: {
+                    labels: ["1", "2", "3", "4", "5"],
+                    datasets: [{
+                        data: [3, 7, 18, 15, 5], // Ganti dengan data dinamis jika tersedia
+                        backgroundColor: "#FF9900"
+                    }]
+                },
+                options: {
+                    layout: {
+                        padding: {
+                            top: 30
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: false,
+                            text: "Ekspektasi Terhadap Kedatangan Teknisi"
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            offset: 5,
+                            formatter: Math.round,
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Responden'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Skala Ekspektasi (1 = Jauh lebih lambat, 5 = Jauh lebih cepat)'
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartPengaruhTeknisi"), {
+                type: "bar",
+                data: {
+                    labels: ["1", "2", "3", "4", "5"],
+                    datasets: [{
+                        data: [2, 6, 14, 17, 11], // Ganti dengan data dinamis jika tersedia
+                        backgroundColor: "#FF9900"
+                    }]
+                },
+                options: {
+                    layout: { padding: { top: 30 } },
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: false,
+                            text: "Pengaruh Kecepatan Teknisi terhadap Keputusan Pengguna"
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            offset: 5,
+                            formatter: Math.round,
+                            font: { weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Responden'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Skala Pengaruh (1 = Sangat tidak setuju, 5 = Sangat setuju)'
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartBiayaWifi"), {
+                type: "pie",
+                data: {
+                    labels: [
+                        "Kurang dari Rp100.000",
+                        "Rp100.000 - Rp200.000",
+                        "Rp200.000 - Rp300.000",
+                        "Rp300.000 - Rp500.000",
+                        "Lebih dari Rp500.000"
+                    ],
+                    datasets: [{
+                        data: [5, 12, 18, 10, 3], // Ganti dengan data dinamis jika tersedia
+                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartSebandingWifi"), {
+                type: "bar",
+                data: {
+                    labels: ["1", "2", "3", "4", "5"],
+                    datasets: [{
+                        data: [3, 9, 13, 16, 9], // Ganti dengan data dinamis jika tersedia
+                        backgroundColor: "#FF9900"
+                    }]
+                },
+                options: {
+                    layout: { padding: { top: 30 } },
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: false,
+                            text: "Keseimbangan Harga dan Layanan WiFi"
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            offset: 5,
+                            formatter: Math.round,
+                            font: { weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Responden'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Skala Keseimbangan (1 = Sangat tidak sebanding, 5 = Sangat sebanding)'
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartEkspektasiBiaya"), {
+                type: "pie",
+                data: {
+                    labels: [
+                        "Kurang dari Rp100.000",
+                        "Rp100.000 - Rp200.000",
+                        "Rp200.000 - Rp300.000",
+                        "Rp300.000 - Rp500.000",
+                        "Lebih dari Rp500.000"
+                    ],
+                    datasets: [{
+                        data: [3, 10, 15, 12, 5], // Ganti dengan data dinamis jika tersedia
+                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartEkspektasiKecepatan"), {
+                type: "pie",
+                data: {
+                    labels: [
+                        "10 Mbps",
+                        "20-30 Mbps",
+                        "40-50 Mbps",
+                        "Lebih dari 100 Mbps"
+                    ],
+                    datasets: [{
+                        data: [2, 12, 18, 8], // Ganti dengan data dinamis jika tersedia
+                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartSumberIndihome"), {
+                type: "pie",
+                data: {
+                    labels: [
+                        "Iklan di TV",
+                        "Media sosial (Instagram, YouTube, TikTok, dll)",
+                        "Website resmi/aplikasi MyTelkomsel",
+                        "Rekomendasi teman/keluarga",
+                        "Brosur/spanduk di lingkungan",
+                        "Penawaran langsung dari sales",
+                        "Pernah lihat di toko/gerai Telkom",
+                        "Lainnya"
+                    ],
+                    datasets: [{
+                        data: [4, 10, 5, 12, 3, 6, 2, 1], // Ganti dengan data dinamis jika tersedia
+                        backgroundColor: [
+                            "#3366CC", "#DC3912", "#FF9900", "#109618",
+                            "#990099", "#0099C6", "#DD4477", "#66AA00"
+                        ]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartProviderTerbaik"), {
+                type: "pie",
+                data: {
+                    labels: ["Indihome", "BizNet", "MyRepublic", "First Media", "Megavision", "Lainnya"],
+                    datasets: [{
+                        data: [25, 20, 15, 10, 5, 25], // Ganti angka ini dengan data dinamis kalau ada
+                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099", "#0099C6"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+        });
+    </script>
+
 
     @endif
-
 
     <script>
         // data pada semua chart belum dari database
@@ -1501,9 +2141,6 @@
             },
             plugins: [ChartDataLabels]
         });
-
-
-
 
 
     </script>

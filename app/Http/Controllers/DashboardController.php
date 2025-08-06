@@ -38,19 +38,25 @@ class DashboardController extends Controller
         
         $saranIndihome = $rawSurveys->map(function ($item) {
             $decoded = json_decode($item->answers, true);
-            
-            if (($decoded['saran_kritik'] ?? '') === 'Ada (isi di kolom di bawah)' || ($decoded['saran_kritik'] ?? '') === 'Lainnya') {
+
+            if (!isset($decoded['saran_kritik'])) {
+                return null;
+            }
+
+            $saran = $decoded['saran_kritik'];
+
+            if ($saran === 'Ada (isi di kolom di bawah)' || $saran === 'Lainnya') {
                 return $decoded['saran_kritik_lainnya'] ?? null;
             }
 
-            if (($decoded['saran_kritik'] ?? '') !== 'Tidak ada') {
-                return $decoded['saran_kritik'];
+            if ($saran !== 'Tidak ada') {
+                return $saran;
             }
 
             return null;
         })->filter()->values();
 
-
+        
         return view('dashboard', [
             'decodedSurveys'  => $decodedSurveys,
             'usiaCounts'      => $usiaCounts,
