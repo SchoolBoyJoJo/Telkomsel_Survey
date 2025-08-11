@@ -28,7 +28,36 @@ class DashboardController extends Controller
         // Data usia untuk grafik
         $usiaCounts = $decodedSurveys->pluck('usia')->countBy()->sortKeys();
 
-        // Ambil semua saran_telkomsel (hanya yang tidak kosong)
+
+        // Pie Chart
+        $jenisKelaminCounts = $decodedSurveys->pluck('jenis_kelamin')->countBy();
+        $jenisTempatTinggalCounts = $decodedSurveys->pluck('jenis_tempat_tinggal')->countBy();
+        $statusPekerjaanCounts = $decodedSurveys->pluck('status_pekerjaan')->countBy();
+        $pendapatanPribadiCounts = $decodedSurveys->pluck('pendapatan')->countBy();
+        $aktifTelkomselCounts = $decodedSurveys->pluck('aktif_telkomsel')->countBy();
+        $multisimerCounts = $decodedSurveys->pluck('multisimer')->countBy();
+        $simKeduaCounts = $decodedSurveys->pluck('sim_kedua')->countBy();
+        $wifiRumahCounts = $decodedSurveys->pluck('wifi_rumah')->countBy();
+        $providerWifiCounts = $decodedSurveys->pluck('provider_wifi')->countBy();
+        $wifiVsDataLuarCounts = $decodedSurveys->pluck('wifi_vs_data_luar')->countBy();
+        $durasiWifiPublikCounts = $decodedSurveys->pluck('durasi_wifi_publik')->countBy();
+        $keluarKotaBulananCounts = $decodedSurveys->pluck('keluar_kota_bulanan')->countBy();
+        $keluargaTelkomselCounts = $decodedSurveys->pluck('keluarga_telkomsel')->countBy();
+        $aktifitasInternetBeratCounts = $decodedSurveys->pluck('aktifitas_internet_berat')->countBy();
+        $jenisPaketCounts = $decodedSurveys->pluck('jenis_paket')->countBy();
+        $sumberPembelianPaketCounts = $decodedSurveys->pluck('sumber_pembelian_paket')->countBy();
+        $hargaPaketWajarCounts = $decodedSurveys->pluck('harga_paket_wajar')->countBy();
+        $tertarikPromoLainCounts = $decodedSurveys->pluck('tertarik_promo_lain')->countBy();
+
+        // Bar chart
+        $penilaianKualitasTelkomselCounts = $decodedSurveys->pluck('penilaian_kualitas_telkomsel')->countBy()->sortKeys();
+        $frekuensiGangguanCounts = $decodedSurveys->pluck('frekuensi_gangguan')->countBy()->sortKeys();
+        $kemudahanBeliTelkomselCounts = $decodedSurveys->pluck('kemudahan_beli_telkomsel')->countBy()->sortKeys();
+        $sepadanHargaTelkomselCounts = $decodedSurveys->pluck('sepadan_harga_telkomsel')->countBy()->sortKeys();
+        $kemudahanPindahProviderCounts = $decodedSurveys->pluck('kemudahan_pindah_provider')->countBy()->sortKeys();
+        $mahalDibandingkanCounts = $decodedSurveys->pluck('mahal_dibandingkan')->countBy()->sortKeys();
+
+        // Saran
         $saranTelkomsel = $decodedSurveys
             ->pluck('saran_telkomsel')
             ->filter(function ($value) {
@@ -62,7 +91,31 @@ class DashboardController extends Controller
             'usiaCounts'      => $usiaCounts,
             'selectedType'    => $surveyType,
             'saranTelkomsel'  => $saranTelkomsel,
-            'saranIndihome'   => $saranIndihome
+            'saranIndihome'   => $saranIndihome,
+            'jenisKelaminCounts'=> $jenisKelaminCounts,
+            'jenisTempatTinggalCounts' => $jenisTempatTinggalCounts,
+            'statusPekerjaanCounts'    => $statusPekerjaanCounts,
+            'pendapatanPribadiCounts' => $pendapatanPribadiCounts,
+            'aktifTelkomselCounts'     => $aktifTelkomselCounts,
+            'multisimerCounts'         => $multisimerCounts,
+            'simKeduaCounts'           => $simKeduaCounts,
+            'wifiRumahCounts'          => $wifiRumahCounts,
+            'providerWifiCounts'       => $providerWifiCounts,
+            'wifiVsDataLuarCounts'     => $wifiVsDataLuarCounts,
+            'durasiWifiPublikCounts'   => $durasiWifiPublikCounts,
+            'keluarKotaBulananCounts'  => $keluarKotaBulananCounts,
+            'keluargaTelkomselCounts' => $keluargaTelkomselCounts,
+            'aktifitasInternetBeratCounts' => $aktifitasInternetBeratCounts,
+            'jenisPaketCounts' => $jenisPaketCounts,
+            'sumberPembelianPaketCounts' => $sumberPembelianPaketCounts,
+            'penilaianKualitasTelkomselCounts' => $penilaianKualitasTelkomselCounts,
+            'frekuensiGangguanCounts' => $frekuensiGangguanCounts,
+            'kemudahanBeliTelkomselCounts' => $kemudahanBeliTelkomselCounts,
+            'hargaPaketWajarCounts' => $hargaPaketWajarCounts,
+            'sepadanHargaTelkomselCounts' => $sepadanHargaTelkomselCounts,
+            'tertarikPromoLainCounts' => $tertarikPromoLainCounts,
+            'kemudahanPindahProviderCounts' => $kemudahanPindahProviderCounts,
+            'mahalDibandingkanCounts' => $mahalDibandingkanCounts
         ]);
     }
 
