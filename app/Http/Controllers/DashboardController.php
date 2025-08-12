@@ -29,7 +29,7 @@ class DashboardController extends Controller
         $usiaCounts = $decodedSurveys->pluck('usia')->countBy()->sortKeys();
 
 
-        // Pie Chart
+        // Pie Chart Telkomsel
         $jenisKelaminCounts = $decodedSurveys->pluck('jenis_kelamin')->countBy();
         $jenisTempatTinggalCounts = $decodedSurveys->pluck('jenis_tempat_tinggal')->countBy();
         $statusPekerjaanCounts = $decodedSurveys->pluck('status_pekerjaan')->countBy();
@@ -49,13 +49,54 @@ class DashboardController extends Controller
         $hargaPaketWajarCounts = $decodedSurveys->pluck('harga_paket_wajar')->countBy();
         $tertarikPromoLainCounts = $decodedSurveys->pluck('tertarik_promo_lain')->countBy();
 
-        // Bar chart
+        // Bar chart Telkomsel
         $penilaianKualitasTelkomselCounts = $decodedSurveys->pluck('penilaian_kualitas_telkomsel')->countBy()->sortKeys();
         $frekuensiGangguanCounts = $decodedSurveys->pluck('frekuensi_gangguan')->countBy()->sortKeys();
         $kemudahanBeliTelkomselCounts = $decodedSurveys->pluck('kemudahan_beli_telkomsel')->countBy()->sortKeys();
         $sepadanHargaTelkomselCounts = $decodedSurveys->pluck('sepadan_harga_telkomsel')->countBy()->sortKeys();
         $kemudahanPindahProviderCounts = $decodedSurveys->pluck('kemudahan_pindah_provider')->countBy()->sortKeys();
         $mahalDibandingkanCounts = $decodedSurveys->pluck('mahal_dibandingkan')->countBy()->sortKeys();
+
+        // Pie chart Indihome
+        $jenisKelaminIndiCounts = $decodedSurveys->pluck('jenis_kelamin')->countBy();
+        $pekerjaanIndiCounts = $decodedSurveys->pluck('pekerjaan')->countBy();
+        $pendapatanIndiCounts = $decodedSurveys->pluck('pendapatan')->countBy();
+        $tempatTinggalIndiCounts = $decodedSurveys->pluck('tempat_tinggal')->countBy();
+        $aktifIndihomeCounts = $decodedSurveys->pluck('aktif_indihome')->countBy();
+        $wifiVsDataCounts = $decodedSurveys->pluck('wifi_vs_data')->countBy();
+        $alasanWifiVsDataCounts = $decodedSurveys->pluck('alasan_wifi_vs_data')->countBy();
+        $wifiGratisUmumCounts = $decodedSurveys->pluck('wifi_gratis_umum')->countBy();
+        $gangguanWifiCounts = $decodedSurveys->pluck('gangguan_wifi')->countBy();
+        $responTeknisiCounts = $decodedSurveys->pluck('respon_teknisi')->countBy();
+        $biayaWifiCounts = $decodedSurveys->pluck('biaya_wifi')->countBy();
+        $ekspektasiBiayaCounts = $decodedSurveys->pluck('ekspektasi_biaya')->countBy();
+        $ekspektasiKecepatanCounts = $decodedSurveys->pluck('ekspektasi_kecepatan')->countBy();
+        $sumberIndihomeCounts = $decodedSurveys->pluck('sumber_indihome')->countBy();
+        $providerTerbaikCounts = $decodedSurveys->pluck('provider_terbaik')->countBy();
+
+
+
+
+
+
+
+
+
+        // Bar chart indihome
+        $hematWifiGratisCounts = $decodedSurveys->pluck('hemat_wifi_gratis')->countBy()->sortKeys();
+        $ekspektasiTeknisiCounts = $decodedSurveys->pluck('ekspektasi_teknisi')->countBy()->sortKeys();
+        $pengaruhTeknisiCounts = $decodedSurveys->pluck('pengaruh_teknisi')->countBy()->sortKeys();
+        $sebandingWifiCounts = $decodedSurveys->pluck('sebanding_wifi')->countBy()->sortKeys();
+
+
+
+
+
+
+
+
+
+
 
         // Saran
         $saranTelkomsel = $decodedSurveys
@@ -87,6 +128,7 @@ class DashboardController extends Controller
 
         
         return view('dashboard', [
+            // Telkomsel
             'decodedSurveys'  => $decodedSurveys,
             'usiaCounts'      => $usiaCounts,
             'selectedType'    => $surveyType,
@@ -115,7 +157,48 @@ class DashboardController extends Controller
             'sepadanHargaTelkomselCounts' => $sepadanHargaTelkomselCounts,
             'tertarikPromoLainCounts' => $tertarikPromoLainCounts,
             'kemudahanPindahProviderCounts' => $kemudahanPindahProviderCounts,
-            'mahalDibandingkanCounts' => $mahalDibandingkanCounts
+            'mahalDibandingkanCounts' => $mahalDibandingkanCounts,
+
+            // Indihome
+            'jenisKelaminIndiCounts' => $jenisKelaminIndiCounts,
+            'pekerjaanIndiCounts' => $pekerjaanIndiCounts,
+            'pendapatanIndiCounts' => $pendapatanIndiCounts,
+            'tempatTinggalIndiCounts' => $tempatTinggalIndiCounts,
+            'aktifIndihomeCounts' => $aktifIndihomeCounts,
+            'wifiVsDataCounts' => $wifiVsDataCounts,
+            'alasanWifiVsDataCounts' => $alasanWifiVsDataCounts,
+            'wifiGratisUmumCounts' => $wifiGratisUmumCounts,
+            'hematWifiGratisCounts' => $hematWifiGratisCounts,
+            'gangguanWifiCounts' => $gangguanWifiCounts,
+            'responTeknisiCounts' => $responTeknisiCounts,
+            'ekspektasiTeknisiCounts' => $ekspektasiTeknisiCounts,
+            'pengaruhTeknisiCounts' => $pengaruhTeknisiCounts,
+            'biayaWifiCounts' => $biayaWifiCounts,
+            'sebandingWifiCounts' => $sebandingWifiCounts,
+            'ekspektasiBiayaCounts' => $ekspektasiBiayaCounts,
+            'ekspektasiKecepatanCounts' => $ekspektasiKecepatanCounts,
+            'sumberIndihomeCounts' => $sumberIndihomeCounts,
+            'providerTerbaikCounts' => $providerTerbaikCounts
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+            
+
         ]);
     }
 

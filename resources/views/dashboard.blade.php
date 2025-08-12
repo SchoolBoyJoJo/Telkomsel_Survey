@@ -590,9 +590,9 @@
             new Chart(document.getElementById("chartJenisKelaminIndi"), {
                 type: "pie",
                 data: {
-                    labels: ["Laki-laki", "Perempuan"],
+                    labels: {!! json_encode($jenisKelaminIndiCounts->keys()) !!},
                     datasets: [{
-                        data: [45, 55],
+                        data: {!! json_encode($jenisKelaminIndiCounts->values()) !!},
                         backgroundColor: ["#FF9900", "#3366CC"]
                     }]
                 },
@@ -616,9 +616,9 @@
             new Chart(document.getElementById("chartPekerjaanIndi"), {
                 type: "pie",
                 data: {
-                    labels: ["Pelajar/Mahasiswa", "Pegawai", "Wirausaha", "Tidak Bekerja"],
+                    labels: {!! json_encode($pekerjaanIndiCounts->keys()) !!},
                     datasets: [{
-                        data: [30, 40, 20, 10],
+                        data: {!! json_encode($pekerjaanIndiCounts->values()) !!},
                         backgroundColor: ["#FF9900", "#3366CC", "#DC3912", "#109618"]
                     }]
                 },
@@ -642,15 +642,9 @@
             new Chart(document.getElementById("chartPendapatanIndi"), {
                 type: "pie",
                 data: {
-                    labels: [
-                        "Kurang dari Rp1.000.000",
-                        "Rp1.000.000 - Rp3.000.000",
-                        "Rp3.000.000 - Rp5.000.000",
-                        "Rp5.000.000 - Rp10.000.000",
-                        "Diatas Rp10.000.000"
-                    ],
+                    labels: {!! json_encode($pendapatanIndiCounts->keys()) !!},
                     datasets: [{
-                        data: [15, 30, 25, 20, 10],
+                        data: {!! json_encode($pendapatanIndiCounts->values()) !!},
                         backgroundColor: ["#FF9900", "#3366CC", "#DC3912", "#109618", "#990099"]
                     }]
                 },
@@ -674,9 +668,9 @@
             new Chart(document.getElementById("chartTempatTinggalIndi"), {
                 type: "pie",
                 data: {
-                    labels: ["Milik sendiri", "Sewa/Kontrak", "Kos", "Tinggal dengan keluarga"],
+                    labels: {!! json_encode($tempatTinggalIndiCounts->keys()) !!},
                     datasets: [{
-                        data: [25, 35, 20, 20], // Ganti dengan data dinamis jika tersedia
+                        data: {!! json_encode($tempatTinggalIndiCounts->values()) !!},
                         backgroundColor: ["#FF9900", "#3366CC", "#DC3912", "#109618"]
                     }]
                 },
@@ -700,9 +694,9 @@
             new Chart(document.getElementById("chartAktifIndihome"), {
                 type: "pie",
                 data: {
-                    labels: ["Ya", "Tidak"],
+                    labels: {!! json_encode($aktifIndihomeCounts->keys()) !!},
                     datasets: [{
-                        data: [70, 30], // Ganti dengan data dinamis jika tersedia
+                        data: {!! json_encode($aktifIndihomeCounts->values()) !!},
                         backgroundColor: ["#3366CC", "#DC3912"]
                     }]
                 },
@@ -726,9 +720,9 @@
             new Chart(document.getElementById("chartWifiVsDataIndi"), {
                 type: "pie",
                 data: {
-                    labels: ["Ya", "Tidak"],
+                    labels: {!! json_encode($wifiVsDataCounts->keys()) !!},
                     datasets: [{
-                        data: [60, 40], // Ganti dengan data dinamis jika tersedia
+                        data: {!! json_encode($wifiVsDataCounts->values()) !!},
                         backgroundColor: ["#3366CC", "#DC3912"]
                     }]
                 },
@@ -752,15 +746,9 @@
             new Chart(document.getElementById("chartAlasanWifiVsData"), {
                 type: "pie",
                 data: {
-                    labels: [
-                        "Lebih stabil",
-                        "Lebih murah",
-                        "Tidak punya kuota data",
-                        "Kebiasaan",
-                        "Lainnya"
-                    ],
+                    labels: {!! json_encode($alasanWifiVsDataCounts->keys()) !!},
                     datasets: [{
-                        data: [30, 25, 15, 20, 10], // Ganti dengan data dinamis jika tersedia
+                        data: {!! json_encode($alasanWifiVsDataCounts->values()) !!},
                         backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099"]
                     }]
                 },
@@ -784,9 +772,9 @@
             new Chart(document.getElementById("chartWifiGratisUmum"), {
                 type: "pie",
                 data: {
-                    labels: ["Ya", "Tidak"],
+                    labels: {!! json_encode($wifiGratisUmumCounts->keys()) !!},
                     datasets: [{
-                        data: [70, 30], // Ganti dengan data dinamis jika tersedia
+                        data: {!! json_encode($wifiGratisUmumCounts->values()) !!},
                         backgroundColor: ["#3366CC", "#DC3912"]
                     }]
                 },
@@ -810,9 +798,9 @@
             new Chart(document.getElementById("chartHematWifiGratis"), {
                 type: "bar",
                 data: {
-                    labels: ["1", "2", "3", "4", "5"], 
+                    labels: {!! json_encode($hematWifiGratisCounts->keys()) !!},
                     datasets: [{
-                        data: [4, 8, 15, 12, 6], // Ganti dengan data dinamis jika tersedia
+                        data: {!! json_encode($hematWifiGratisCounts->values()) !!},
                         backgroundColor: "#FF9900"
                     }]
                 },
@@ -862,9 +850,9 @@
             new Chart(document.getElementById("chartGangguanWifi"), {
                 type: "pie",
                 data: {
-                    labels: ["Ya", "Tidak"],
+                    labels: {!! json_encode($gangguanWifiCounts->keys()) !!},
                     datasets: [{
-                        data: [65, 35], // Ganti dengan data dinamis jika tersedia
+                        data: {!! json_encode($gangguanWifiCounts->values()) !!},
                         backgroundColor: ["#3366CC", "#DC3912"]
                     }]
                 },
@@ -888,9 +876,9 @@
             new Chart(document.getElementById("chartResponTeknisi"), {
                 type: "pie",
                 data: {
-                    labels: ["Dalam 2 jam", "2-4 jam", "8-12 jam", "Lebih dari 12 jam"],
+                    labels: {!! json_encode($responTeknisiCounts->keys()) !!},
                     datasets: [{
-                        data: [20, 35, 25, 20], // Ganti dengan data dinamis jika tersedia
+                        data: {!! json_encode($responTeknisiCounts->values()) !!},
                         backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618"]
                     }]
                 },
@@ -914,9 +902,9 @@
             new Chart(document.getElementById("chartEkspektasiTeknisi"), {
                 type: "bar",
                 data: {
-                    labels: ["1", "2", "3", "4", "5"],
+                    labels: {!! json_encode($ekspektasiTeknisiCounts->keys()) !!},
                     datasets: [{
-                        data: [3, 7, 18, 15, 5], // Ganti dengan data dinamis jika tersedia
+                        data: {!! json_encode($ekspektasiTeknisiCounts->values()) !!},
                         backgroundColor: "#FF9900"
                     }]
                 },
@@ -966,9 +954,9 @@
             new Chart(document.getElementById("chartPengaruhTeknisi"), {
                 type: "bar",
                 data: {
-                    labels: ["1", "2", "3", "4", "5"],
+                    labels: {!! json_encode($pengaruhTeknisiCounts->keys()) !!},
                     datasets: [{
-                        data: [2, 6, 14, 17, 11], // Ganti dengan data dinamis jika tersedia
+                        data: {!! json_encode($pengaruhTeknisiCounts->values()) !!},
                         backgroundColor: "#FF9900"
                     }]
                 },
@@ -1010,15 +998,9 @@
             new Chart(document.getElementById("chartBiayaWifi"), {
                 type: "pie",
                 data: {
-                    labels: [
-                        "Kurang dari Rp100.000",
-                        "Rp100.000 - Rp200.000",
-                        "Rp200.000 - Rp300.000",
-                        "Rp300.000 - Rp500.000",
-                        "Lebih dari Rp500.000"
-                    ],
+                    labels: {!! json_encode($biayaWifiCounts->keys()) !!},
                     datasets: [{
-                        data: [5, 12, 18, 10, 3], // Ganti dengan data dinamis jika tersedia
+                        data: {!! json_encode($biayaWifiCounts->values()) !!},
                         backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099"]
                     }]
                 },
@@ -1042,9 +1024,9 @@
             new Chart(document.getElementById("chartSebandingWifi"), {
                 type: "bar",
                 data: {
-                    labels: ["1", "2", "3", "4", "5"],
+                    labels: {!! json_encode($sebandingWifiCounts->keys()) !!},
                     datasets: [{
-                        data: [3, 9, 13, 16, 9], // Ganti dengan data dinamis jika tersedia
+                        data: {!! json_encode($sebandingWifiCounts->values()) !!},
                         backgroundColor: "#FF9900"
                     }]
                 },
@@ -1086,15 +1068,9 @@
             new Chart(document.getElementById("chartEkspektasiBiaya"), {
                 type: "pie",
                 data: {
-                    labels: [
-                        "Kurang dari Rp100.000",
-                        "Rp100.000 - Rp200.000",
-                        "Rp200.000 - Rp300.000",
-                        "Rp300.000 - Rp500.000",
-                        "Lebih dari Rp500.000"
-                    ],
+                    labels: {!! json_encode($ekspektasiBiayaCounts->keys()) !!},
                     datasets: [{
-                        data: [3, 10, 15, 12, 5], // Ganti dengan data dinamis jika tersedia
+                        data: {!! json_encode($ekspektasiBiayaCounts->values()) !!},
                         backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099"]
                     }]
                 },
@@ -1118,14 +1094,9 @@
             new Chart(document.getElementById("chartEkspektasiKecepatan"), {
                 type: "pie",
                 data: {
-                    labels: [
-                        "10 Mbps",
-                        "20-30 Mbps",
-                        "40-50 Mbps",
-                        "Lebih dari 100 Mbps"
-                    ],
+                    labels: {!! json_encode($ekspektasiKecepatanCounts->keys()) !!},
                     datasets: [{
-                        data: [2, 12, 18, 8], // Ganti dengan data dinamis jika tersedia
+                        data: {!! json_encode($ekspektasiKecepatanCounts->values()) !!},
                         backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618"]
                     }]
                 },
@@ -1149,18 +1120,9 @@
             new Chart(document.getElementById("chartSumberIndihome"), {
                 type: "pie",
                 data: {
-                    labels: [
-                        "Iklan di TV",
-                        "Media sosial (Instagram, YouTube, TikTok, dll)",
-                        "Website resmi/aplikasi MyTelkomsel",
-                        "Rekomendasi teman/keluarga",
-                        "Brosur/spanduk di lingkungan",
-                        "Penawaran langsung dari sales",
-                        "Pernah lihat di toko/gerai Telkom",
-                        "Lainnya"
-                    ],
+                    labels: {!! json_encode($sumberIndihomeCounts->keys()) !!},
                     datasets: [{
-                        data: [4, 10, 5, 12, 3, 6, 2, 1], // Ganti dengan data dinamis jika tersedia
+                        data: {!! json_encode($sumberIndihomeCounts->values()) !!},
                         backgroundColor: [
                             "#3366CC", "#DC3912", "#FF9900", "#109618",
                             "#990099", "#0099C6", "#DD4477", "#66AA00"
@@ -1187,9 +1149,9 @@
             new Chart(document.getElementById("chartProviderTerbaik"), {
                 type: "pie",
                 data: {
-                    labels: ["Indihome", "BizNet", "MyRepublic", "First Media", "Megavision", "Lainnya"],
+                    labels: {!! json_encode($providerTerbaikCounts->keys()) !!},
                     datasets: [{
-                        data: [25, 20, 15, 10, 5, 25], // Ganti angka ini dengan data dinamis kalau ada
+                        data: {!! json_encode($providerTerbaikCounts->values()) !!},
                         backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099", "#0099C6"]
                     }]
                 },
@@ -1217,7 +1179,7 @@
     @endif
 
     <script>
-        // data pada semua chart belum dari database
+
         // Jenis Kelamin
         new Chart(document.getElementById("chartJenisKelamin"), {
             type: "pie",
