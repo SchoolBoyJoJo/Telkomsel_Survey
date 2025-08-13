@@ -303,278 +303,43 @@
     </div>
 
     <div class="bg-white rounded-lg shadow p-6 mt-6">
-        <h2 class="text-lg font-semibold mb-4">
-            Saran dan keluhan lain selama Anda menggunakan Telkomsel.
-            <span class="text-gray-500 text-sm">(Total : {{ count($saranTelkomsel) }})</span>
-        </h2>
-        
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold">
+                Saran dan keluhan lain selama Anda menggunakan Telkomsel.
+                <span class="text-gray-500 text-sm">(Total : {{ count($saranTelkomsel) }})</span>
+            </h2>
+
+            @if(isset($saranTelkomsel) && count($saranTelkomsel))
+                <button id="btn-summary"
+                    class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded shadow">
+                    Summary With AI
+                </button>
+            @endif
+        </div>
+
+        {{-- Loading indicator --}}
+        <div id="loading" class="hidden mb-4 flex items-center text-gray-600">
+            <svg class="animate-spin h-5 w-5 mr-2 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10"
+                        stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+            AI sedang memproses ringkasan...
+        </div>
+
+        {{-- Summary result --}}
+        <div id="summary-card" class="mb-4 p-4 bg-green-50 border border-green-300 rounded hidden">
+            <h3 class="font-semibold mb-2">Summary:</h3>
+            <div id="summary-content"></div>
+        </div>
+
         @if(isset($saranTelkomsel) && count($saranTelkomsel))
             <div class="max-h-72 overflow-y-auto pr-2">
                 <ul class="space-y-3">
                     @foreach($saranTelkomsel as $saran)
-                        <li class="border-b pb-2 text-gray-800">
-                            {{ $saran }}
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        @else
-            <p class="text-gray-500 italic">
-                Belum ada saran atau kritik yang diberikan.
-            </p>
-        @endif
-    </div>
-    
-    @endif
-
-    @if ($selectedType === 'indihome')
-
-        {{-- Grafik Usia --}}
-        @if (isset($usiaCounts) && count($usiaCounts))
-            <div class="bg-white p-4 mb-6 rounded shadow">
-                <h2 class="text-lg font-semibold mb-4">Distribusi Usia Responden</h2>
-                <canvas id="usiaChart" width="400" height="150"></canvas>
-            </div>
-
-            <script>
-                const usiaLabels = @json($usiaCounts->keys());
-                const usiaData = @json($usiaCounts->values());
-
-                const ctx = document.getElementById('usiaChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: usiaLabels,
-                        datasets: [{
-                            label: 'Jumlah Responden',
-                            data: usiaData,
-                            backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Jumlah Responden'
-                                }
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Usia'
-                                }
-                            }
-                        }
-                    }
-                });
-            </script>
-        @else
-            <div class="bg-white p-4 rounded shadow text-gray-600">
-                <p class="text-center">Belum ada data usia yang tersedia untuk ditampilkan.</p>
-            </div>
-        @endif
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-
-        <!-- Jenis Kelamin -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Jenis Kelamin</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartJenisKelaminIndi" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- status pekerjaan -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Status Pekerjaan</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartPekerjaanIndi" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- pendapatan -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Pendapatan Per bulan</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartPendapatanIndi" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-
-        <!-- indi tempat tinggal -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Status Tempat Tinggal</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartTempatTinggalIndi" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- Aktif Telkomsel -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Apakah masih berlangganan Indihome?</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartAktifIndihome" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- wifi vs data indihome -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Apakah lebih sering menggunakan wifi dibanding data?</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartWifiVsDataIndi" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-
-        <!-- alasan wifi vs data -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Apa alasannya?</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartAlasanWifiVsData" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- mudah cari wifi di tempat umum -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Apakah mudah mencari wifi di tempat umum?</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartWifiGratisUmum" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- wifi gratis untuk hemat -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Apakah anda sering menggunakan wifi gratis untuk menghemat?</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartHematWifiGratis" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-
-        <!-- gangguan jaringan wifi -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Apakah anda sering mengalami gangguan jaringan wifi?</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartGangguanWifi" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- teknisi datang -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Berapa lama biasanya teknisi datang setelah melapor?</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartResponTeknisi" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- waktu teknisi ekspetasi -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Apakah kedatangan teknisi sudah sesuai dengan ekspektasi?</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartEkspektasiTeknisi" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-
-        <!-- pengaruh teknisi -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Apakah kecepatan teknisi mempengaruhi anda untuk tetap menggunakan layanan?</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartPengaruhTeknisi" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- biaya wifi -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Berapa biaya rata-rata untuk bayar layanan wifi setiap bulan?</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartBiayaWifi" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- harga wifi sebanding -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">Dengan harga tersebut apakah layanan wifi sudah sebanding?</h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartSebandingWifi" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-6">
-
-        <!-- ekspektasi biaya -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">
-                Berapa ekspektasi biaya yang anda keluarkan untuk layanan internet wifi yang stabil dan cepat?
-            </h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartEkspektasiBiaya" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- ekspektasi kecepatan -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">
-                Berapa kecepatan (Mbps) yang anda harapkan?
-            </h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartEkspektasiKecepatan" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- sumber indihome -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">
-                Bagaimana anda mengetahui tentang layanan Indihome?
-            </h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartSumberIndihome" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-        <!-- provider terbaik -->
-        <div class="bg-white p-4 rounded shadow">
-            <h3 class="text-md font-semibold mb-2 text-center">
-                Apa provider terbaik menurut anda saat ini?
-            </h3>
-            <div class="flex justify-center items-center">
-                <canvas id="chartProviderTerbaik" width="250" height="250"></canvas>
-            </div>
-        </div>
-
-    </div>
-    
-    <div class="bg-white rounded-lg shadow p-6 mt-6">
-        <h2 class="text-lg font-semibold mb-4">
-            Saran dan keluhan lain selama Anda menggunakan IndiHome.
-            <span class="text-gray-500 text-sm">(Total : {{ count($saranIndihome) }})</span>
-        </h2>
-        
-        @if(isset($saranIndihome) && count($saranIndihome))
-            <div class="max-h-72 overflow-y-auto pr-2">
-                <ul class="space-y-3">
-                    @foreach($saranIndihome as $saran)
-                        <li class="border-b pb-2 text-gray-800">
-                            {{ $saran }}
-                        </li>
+                        <li class="border-b pb-2 text-gray-800">{{ $saran }}</li>
                     @endforeach
                 </ul>
             </div>
@@ -586,599 +351,33 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            new Chart(document.getElementById("chartJenisKelaminIndi"), {
-                type: "pie",
-                data: {
-                    labels: {!! json_encode($jenisKelaminIndiCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($jenisKelaminIndiCounts->values()) !!},
-                        backgroundColor: ["#FF9900", "#3366CC"]
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: { position: 'right' },
-                        datalabels: {
-                            formatter: (value, context) => {
-                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                const percentage = (value / total) * 100;
-                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
-                            },
-                            color: '#fff',
-                            font: { weight: 'bold', size: 14 }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
 
-            new Chart(document.getElementById("chartPekerjaanIndi"), {
-                type: "pie",
-                data: {
-                    labels: {!! json_encode($pekerjaanIndiCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($pekerjaanIndiCounts->values()) !!},
-                        backgroundColor: ["#FF9900", "#3366CC", "#DC3912", "#109618"]
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: { position: 'right' },
-                        datalabels: {
-                            formatter: (value, context) => {
-                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                const percentage = (value / total) * 100;
-                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
-                            },
-                            color: '#fff',
-                            font: { weight: 'bold', size: 14 }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
+        // Summary AI Telkomsel
+        document.getElementById('btn-summary')?.addEventListener('click', function () {
+            let sarans = @json($saranTelkomsel);
 
-            new Chart(document.getElementById("chartPendapatanIndi"), {
-                type: "pie",
-                data: {
-                    labels: {!! json_encode($pendapatanIndiCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($pendapatanIndiCounts->values()) !!},
-                        backgroundColor: ["#FF9900", "#3366CC", "#DC3912", "#109618", "#990099"]
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: { position: 'right' },
-                        datalabels: {
-                            formatter: (value, context) => {
-                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                const percentage = (value / total) * 100;
-                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
-                            },
-                            color: '#fff',
-                            font: { weight: 'bold', size: 14 }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('summary-card').classList.add('hidden');
 
-            new Chart(document.getElementById("chartTempatTinggalIndi"), {
-                type: "pie",
-                data: {
-                    labels: {!! json_encode($tempatTinggalIndiCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($tempatTinggalIndiCounts->values()) !!},
-                        backgroundColor: ["#FF9900", "#3366CC", "#DC3912", "#109618"]
-                    }]
+            fetch('{{ route("saran.summary.ajax") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                options: {
-                    plugins: {
-                        legend: { position: 'right' },
-                        datalabels: {
-                            formatter: (value, context) => {
-                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                const percentage = (value / total) * 100;
-                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
-                            },
-                            color: '#fff',
-                            font: { weight: 'bold', size: 14 }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
+                body: JSON.stringify({ sarans: sarans })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('summary-content').innerHTML = data.summary;
+                document.getElementById('summary-card').classList.remove('hidden');
+            })
+            .catch(() => {
+                document.getElementById('loading').classList.add('hidden');
+                alert('Terjadi kesalahan saat memproses ringkasan.');
             });
-
-            new Chart(document.getElementById("chartAktifIndihome"), {
-                type: "pie",
-                data: {
-                    labels: {!! json_encode($aktifIndihomeCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($aktifIndihomeCounts->values()) !!},
-                        backgroundColor: ["#3366CC", "#DC3912"]
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: { position: 'right' },
-                        datalabels: {
-                            formatter: (value, context) => {
-                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                const percentage = (value / total) * 100;
-                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
-                            },
-                            color: '#fff',
-                            font: { weight: 'bold', size: 14 }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-
-            new Chart(document.getElementById("chartWifiVsDataIndi"), {
-                type: "pie",
-                data: {
-                    labels: {!! json_encode($wifiVsDataCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($wifiVsDataCounts->values()) !!},
-                        backgroundColor: ["#3366CC", "#DC3912"]
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: { position: 'right' },
-                        datalabels: {
-                            formatter: (value, context) => {
-                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                const percentage = (value / total) * 100;
-                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
-                            },
-                            color: '#fff',
-                            font: { weight: 'bold', size: 14 }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-
-            new Chart(document.getElementById("chartAlasanWifiVsData"), {
-                type: "pie",
-                data: {
-                    labels: {!! json_encode($alasanWifiVsDataCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($alasanWifiVsDataCounts->values()) !!},
-                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099"]
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: { position: 'right' },
-                        datalabels: {
-                            formatter: (value, context) => {
-                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                const percentage = (value / total) * 100;
-                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
-                            },
-                            color: '#fff',
-                            font: { weight: 'bold', size: 14 }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-
-            new Chart(document.getElementById("chartWifiGratisUmum"), {
-                type: "pie",
-                data: {
-                    labels: {!! json_encode($wifiGratisUmumCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($wifiGratisUmumCounts->values()) !!},
-                        backgroundColor: ["#3366CC", "#DC3912"]
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: { position: 'right' },
-                        datalabels: {
-                            formatter: (value, context) => {
-                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                const percentage = (value / total) * 100;
-                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
-                            },
-                            color: '#fff',
-                            font: { weight: 'bold', size: 14 }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-
-            new Chart(document.getElementById("chartHematWifiGratis"), {
-                type: "bar",
-                data: {
-                    labels: {!! json_encode($hematWifiGratisCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($hematWifiGratisCounts->values()) !!},
-                        backgroundColor: "#FF9900"
-                    }]
-                },
-                options: {
-                    layout: {
-                        padding: {
-                            top: 30
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        title: {
-                            display: false,
-                            text: "Penggunaan WiFi Gratis untuk Menghemat Kuota"
-                        },
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'top',
-                            offset: 5,
-                            formatter: Math.round,
-                            font: {
-                                weight: 'bold'
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Jumlah Responden'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Skala Frekuensi (1 = Jarang, 5 = Sering)'
-                            }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-
-            new Chart(document.getElementById("chartGangguanWifi"), {
-                type: "pie",
-                data: {
-                    labels: {!! json_encode($gangguanWifiCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($gangguanWifiCounts->values()) !!},
-                        backgroundColor: ["#3366CC", "#DC3912"]
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: { position: 'right' },
-                        datalabels: {
-                            formatter: (value, context) => {
-                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                const percentage = (value / total) * 100;
-                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
-                            },
-                            color: '#fff',
-                            font: { weight: 'bold', size: 14 }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-
-            new Chart(document.getElementById("chartResponTeknisi"), {
-                type: "pie",
-                data: {
-                    labels: {!! json_encode($responTeknisiCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($responTeknisiCounts->values()) !!},
-                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618"]
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: { position: 'right' },
-                        datalabels: {
-                            formatter: (value, context) => {
-                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                const percentage = (value / total) * 100;
-                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
-                            },
-                            color: '#fff',
-                            font: { weight: 'bold', size: 14 }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-
-            new Chart(document.getElementById("chartEkspektasiTeknisi"), {
-                type: "bar",
-                data: {
-                    labels: {!! json_encode($ekspektasiTeknisiCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($ekspektasiTeknisiCounts->values()) !!},
-                        backgroundColor: "#FF9900"
-                    }]
-                },
-                options: {
-                    layout: {
-                        padding: {
-                            top: 30
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        title: {
-                            display: false,
-                            text: "Ekspektasi Terhadap Kedatangan Teknisi"
-                        },
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'top',
-                            offset: 5,
-                            formatter: Math.round,
-                            font: {
-                                weight: 'bold'
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Jumlah Responden'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Skala Ekspektasi (1 = Jauh lebih lambat, 5 = Jauh lebih cepat)'
-                            }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-
-            new Chart(document.getElementById("chartPengaruhTeknisi"), {
-                type: "bar",
-                data: {
-                    labels: {!! json_encode($pengaruhTeknisiCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($pengaruhTeknisiCounts->values()) !!},
-                        backgroundColor: "#FF9900"
-                    }]
-                },
-                options: {
-                    layout: { padding: { top: 30 } },
-                    plugins: {
-                        legend: { display: false },
-                        title: {
-                            display: false,
-                            text: "Pengaruh Kecepatan Teknisi terhadap Keputusan Pengguna"
-                        },
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'top',
-                            offset: 5,
-                            formatter: Math.round,
-                            font: { weight: 'bold' }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Jumlah Responden'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Skala Pengaruh (1 = Sangat tidak setuju, 5 = Sangat setuju)'
-                            }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-
-            new Chart(document.getElementById("chartBiayaWifi"), {
-                type: "pie",
-                data: {
-                    labels: {!! json_encode($biayaWifiCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($biayaWifiCounts->values()) !!},
-                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099"]
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: { position: 'right' },
-                        datalabels: {
-                            formatter: (value, context) => {
-                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                const percentage = (value / total) * 100;
-                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
-                            },
-                            color: '#fff',
-                            font: { weight: 'bold', size: 14 }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-
-            new Chart(document.getElementById("chartSebandingWifi"), {
-                type: "bar",
-                data: {
-                    labels: {!! json_encode($sebandingWifiCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($sebandingWifiCounts->values()) !!},
-                        backgroundColor: "#FF9900"
-                    }]
-                },
-                options: {
-                    layout: { padding: { top: 30 } },
-                    plugins: {
-                        legend: { display: false },
-                        title: {
-                            display: false,
-                            text: "Keseimbangan Harga dan Layanan WiFi"
-                        },
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'top',
-                            offset: 5,
-                            formatter: Math.round,
-                            font: { weight: 'bold' }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Jumlah Responden'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Skala Keseimbangan (1 = Sangat tidak sebanding, 5 = Sangat sebanding)'
-                            }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-
-            new Chart(document.getElementById("chartEkspektasiBiaya"), {
-                type: "pie",
-                data: {
-                    labels: {!! json_encode($ekspektasiBiayaCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($ekspektasiBiayaCounts->values()) !!},
-                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099"]
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: { position: 'right' },
-                        datalabels: {
-                            formatter: (value, context) => {
-                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                const percentage = (value / total) * 100;
-                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
-                            },
-                            color: '#fff',
-                            font: { weight: 'bold', size: 14 }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-
-            new Chart(document.getElementById("chartEkspektasiKecepatan"), {
-                type: "pie",
-                data: {
-                    labels: {!! json_encode($ekspektasiKecepatanCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($ekspektasiKecepatanCounts->values()) !!},
-                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618"]
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: { position: 'right' },
-                        datalabels: {
-                            formatter: (value, context) => {
-                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                const percentage = (value / total) * 100;
-                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
-                            },
-                            color: '#fff',
-                            font: { weight: 'bold', size: 14 }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-
-            new Chart(document.getElementById("chartSumberIndihome"), {
-                type: "pie",
-                data: {
-                    labels: {!! json_encode($sumberIndihomeCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($sumberIndihomeCounts->values()) !!},
-                        backgroundColor: [
-                            "#3366CC", "#DC3912", "#FF9900", "#109618",
-                            "#990099", "#0099C6", "#DD4477", "#66AA00"
-                        ]
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: { position: 'right' },
-                        datalabels: {
-                            formatter: (value, context) => {
-                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                const percentage = (value / total) * 100;
-                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
-                            },
-                            color: '#fff',
-                            font: { weight: 'bold', size: 14 }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-
-            new Chart(document.getElementById("chartProviderTerbaik"), {
-                type: "pie",
-                data: {
-                    labels: {!! json_encode($providerTerbaikCounts->keys()) !!},
-                    datasets: [{
-                        data: {!! json_encode($providerTerbaikCounts->values()) !!},
-                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099", "#0099C6"]
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: { position: 'right' },
-                        datalabels: {
-                            formatter: (value, context) => {
-                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                const percentage = (value / total) * 100;
-                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
-                            },
-                            color: '#fff',
-                            font: { weight: 'bold', size: 14 }
-                        }
-                    }
-                },
-                plugins: [ChartDataLabels]
-            });
-
         });
-    </script>
-
-
-    @endif
-
-    <script>
 
         // Jenis Kelamin
         new Chart(document.getElementById("chartJenisKelamin"), {
@@ -2065,5 +1264,920 @@
 
 
     </script>
+
+    @endif
+
+    @if ($selectedType === 'indihome')
+
+        {{-- Grafik Usia --}}
+        @if (isset($usiaCounts) && count($usiaCounts))
+            <div class="bg-white p-4 mb-6 rounded shadow">
+                <h2 class="text-lg font-semibold mb-4">Distribusi Usia Responden</h2>
+                <canvas id="usiaChart" width="400" height="150"></canvas>
+            </div>
+
+            <script>
+                const usiaLabels = @json($usiaCounts->keys());
+                const usiaData = @json($usiaCounts->values());
+
+                const ctx = document.getElementById('usiaChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: usiaLabels,
+                        datasets: [{
+                            label: 'Jumlah Responden',
+                            data: usiaData,
+                            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Jumlah Responden'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Usia'
+                                }
+                            }
+                        }
+                    }
+                });
+            </script>
+        @else
+            <div class="bg-white p-4 rounded shadow text-gray-600">
+                <p class="text-center">Belum ada data usia yang tersedia untuk ditampilkan.</p>
+            </div>
+        @endif
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+
+        <!-- Jenis Kelamin -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Jenis Kelamin</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartJenisKelaminIndi" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- status pekerjaan -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Status Pekerjaan</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartPekerjaanIndi" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- pendapatan -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Pendapatan Per bulan</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartPendapatanIndi" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+
+        <!-- indi tempat tinggal -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Status Tempat Tinggal</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartTempatTinggalIndi" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- Aktif Telkomsel -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah masih berlangganan Indihome?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartAktifIndihome" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- wifi vs data indihome -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah lebih sering menggunakan wifi dibanding data?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartWifiVsDataIndi" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+
+        <!-- alasan wifi vs data -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Apa alasannya?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartAlasanWifiVsData" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- mudah cari wifi di tempat umum -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah mudah mencari wifi di tempat umum?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartWifiGratisUmum" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- wifi gratis untuk hemat -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah anda sering menggunakan wifi gratis untuk menghemat?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartHematWifiGratis" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+
+        <!-- gangguan jaringan wifi -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah anda sering mengalami gangguan jaringan wifi?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartGangguanWifi" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- teknisi datang -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Berapa lama biasanya teknisi datang setelah melapor?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartResponTeknisi" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- waktu teknisi ekspetasi -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah kedatangan teknisi sudah sesuai dengan ekspektasi?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartEkspektasiTeknisi" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+
+        <!-- pengaruh teknisi -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Apakah kecepatan teknisi mempengaruhi anda untuk tetap menggunakan layanan?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartPengaruhTeknisi" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- biaya wifi -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Berapa biaya rata-rata untuk bayar layanan wifi setiap bulan?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartBiayaWifi" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- harga wifi sebanding -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">Dengan harga tersebut apakah layanan wifi sudah sebanding?</h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartSebandingWifi" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-6">
+
+        <!-- ekspektasi biaya -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">
+                Berapa ekspektasi biaya yang anda keluarkan untuk layanan internet wifi yang stabil dan cepat?
+            </h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartEkspektasiBiaya" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- ekspektasi kecepatan -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">
+                Berapa kecepatan (Mbps) yang anda harapkan?
+            </h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartEkspektasiKecepatan" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- sumber indihome -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">
+                Bagaimana anda mengetahui tentang layanan Indihome?
+            </h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartSumberIndihome" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- provider terbaik -->
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-md font-semibold mb-2 text-center">
+                Apa provider terbaik menurut anda saat ini?
+            </h3>
+            <div class="flex justify-center items-center">
+                <canvas id="chartProviderTerbaik" width="250" height="250"></canvas>
+            </div>
+        </div>
+
+    </div>
+    
+    <div class="bg-white rounded-lg shadow p-6 mt-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold">
+                Saran dan keluhan lain selama Anda menggunakan IndiHome.
+                <span class="text-gray-500 text-sm">(Total : {{ count($saranIndihome) }})</span>
+            </h2>
+
+            @if(isset($saranIndihome) && count($saranIndihome))
+                <button id="btn-summary"
+                    class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded shadow">
+                    Summary With AI
+                </button>
+            @endif
+        </div>
+
+        {{-- Loading indicator --}}
+        <div id="loading" class="hidden mb-4 flex items-center text-gray-600">
+            <svg class="animate-spin h-5 w-5 mr-2 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10"
+                        stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+            AI sedang memproses ringkasan...
+        </div>
+
+        {{-- Summary result --}}
+        <div id="summary-card" class="mb-4 p-4 bg-green-50 border border-green-300 rounded hidden">
+            <h3 class="font-semibold mb-2">Summary:</h3>
+            <div id="summary-content"></div>
+        </div>
+
+        @if(isset($saranIndihome) && count($saranIndihome))
+            <div class="max-h-72 overflow-y-auto pr-2">
+                <ul class="space-y-3">
+                    @foreach($saranIndihome as $saran)
+                        <li class="border-b pb-2 text-gray-800">{{ $saran }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @else
+            <p class="text-gray-500 italic">
+                Belum ada saran atau kritik yang diberikan.
+            </p>
+        @endif
+    </div>
+
+    <script>
+
+        // Summary AI Indihome
+        document.getElementById('btn-summary')?.addEventListener('click', function () {
+            const sarans = [];
+            document.querySelectorAll('.max-h-72 ul li').forEach(li => {
+                sarans.push(li.textContent.trim());
+            });
+
+            const loading = document.getElementById('loading');
+            const summaryCard = document.getElementById('summary-card');
+            const summaryContent = document.getElementById('summary-content');
+
+            summaryCard.classList.add('hidden');
+            loading.classList.remove('hidden');
+
+            fetch("{{ route('saran.summary.ajax') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({ sarans })
+            })
+            .then(res => res.json())
+            .then(data => {
+                summaryContent.innerHTML = data.summary;
+                summaryCard.classList.remove('hidden');
+            })
+            .catch(() => {
+                summaryContent.innerHTML = '<p class="text-red-500">Terjadi kesalahan saat memproses ringkasan.</p>';
+                summaryCard.classList.remove('hidden');
+            })
+            .finally(() => {
+                loading.classList.add('hidden');
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            new Chart(document.getElementById("chartJenisKelaminIndi"), {
+                type: "pie",
+                data: {
+                    labels: {!! json_encode($jenisKelaminIndiCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($jenisKelaminIndiCounts->values()) !!},
+                        backgroundColor: ["#FF9900", "#3366CC"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartPekerjaanIndi"), {
+                type: "pie",
+                data: {
+                    labels: {!! json_encode($pekerjaanIndiCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($pekerjaanIndiCounts->values()) !!},
+                        backgroundColor: ["#FF9900", "#3366CC", "#DC3912", "#109618"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartPendapatanIndi"), {
+                type: "pie",
+                data: {
+                    labels: {!! json_encode($pendapatanIndiCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($pendapatanIndiCounts->values()) !!},
+                        backgroundColor: ["#FF9900", "#3366CC", "#DC3912", "#109618", "#990099"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartTempatTinggalIndi"), {
+                type: "pie",
+                data: {
+                    labels: {!! json_encode($tempatTinggalIndiCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($tempatTinggalIndiCounts->values()) !!},
+                        backgroundColor: ["#FF9900", "#3366CC", "#DC3912", "#109618"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartAktifIndihome"), {
+                type: "pie",
+                data: {
+                    labels: {!! json_encode($aktifIndihomeCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($aktifIndihomeCounts->values()) !!},
+                        backgroundColor: ["#3366CC", "#DC3912"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartWifiVsDataIndi"), {
+                type: "pie",
+                data: {
+                    labels: {!! json_encode($wifiVsDataCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($wifiVsDataCounts->values()) !!},
+                        backgroundColor: ["#3366CC", "#DC3912"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartAlasanWifiVsData"), {
+                type: "pie",
+                data: {
+                    labels: {!! json_encode($alasanWifiVsDataCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($alasanWifiVsDataCounts->values()) !!},
+                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartWifiGratisUmum"), {
+                type: "pie",
+                data: {
+                    labels: {!! json_encode($wifiGratisUmumCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($wifiGratisUmumCounts->values()) !!},
+                        backgroundColor: ["#3366CC", "#DC3912"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartHematWifiGratis"), {
+                type: "bar",
+                data: {
+                    labels: {!! json_encode($hematWifiGratisCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($hematWifiGratisCounts->values()) !!},
+                        backgroundColor: "#FF9900"
+                    }]
+                },
+                options: {
+                    layout: {
+                        padding: {
+                            top: 30
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: false,
+                            text: "Penggunaan WiFi Gratis untuk Menghemat Kuota"
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            offset: 5,
+                            formatter: Math.round,
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Responden'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Skala Frekuensi (1 = Jarang, 5 = Sering)'
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartGangguanWifi"), {
+                type: "pie",
+                data: {
+                    labels: {!! json_encode($gangguanWifiCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($gangguanWifiCounts->values()) !!},
+                        backgroundColor: ["#3366CC", "#DC3912"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartResponTeknisi"), {
+                type: "pie",
+                data: {
+                    labels: {!! json_encode($responTeknisiCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($responTeknisiCounts->values()) !!},
+                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartEkspektasiTeknisi"), {
+                type: "bar",
+                data: {
+                    labels: {!! json_encode($ekspektasiTeknisiCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($ekspektasiTeknisiCounts->values()) !!},
+                        backgroundColor: "#FF9900"
+                    }]
+                },
+                options: {
+                    layout: {
+                        padding: {
+                            top: 30
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: false,
+                            text: "Ekspektasi Terhadap Kedatangan Teknisi"
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            offset: 5,
+                            formatter: Math.round,
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Responden'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Skala Ekspektasi (1 = Jauh lebih lambat, 5 = Jauh lebih cepat)'
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartPengaruhTeknisi"), {
+                type: "bar",
+                data: {
+                    labels: {!! json_encode($pengaruhTeknisiCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($pengaruhTeknisiCounts->values()) !!},
+                        backgroundColor: "#FF9900"
+                    }]
+                },
+                options: {
+                    layout: { padding: { top: 30 } },
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: false,
+                            text: "Pengaruh Kecepatan Teknisi terhadap Keputusan Pengguna"
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            offset: 5,
+                            formatter: Math.round,
+                            font: { weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Responden'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Skala Pengaruh (1 = Sangat tidak setuju, 5 = Sangat setuju)'
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartBiayaWifi"), {
+                type: "pie",
+                data: {
+                    labels: {!! json_encode($biayaWifiCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($biayaWifiCounts->values()) !!},
+                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartSebandingWifi"), {
+                type: "bar",
+                data: {
+                    labels: {!! json_encode($sebandingWifiCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($sebandingWifiCounts->values()) !!},
+                        backgroundColor: "#FF9900"
+                    }]
+                },
+                options: {
+                    layout: { padding: { top: 30 } },
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: false,
+                            text: "Keseimbangan Harga dan Layanan WiFi"
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            offset: 5,
+                            formatter: Math.round,
+                            font: { weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Responden'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Skala Keseimbangan (1 = Sangat tidak sebanding, 5 = Sangat sebanding)'
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartEkspektasiBiaya"), {
+                type: "pie",
+                data: {
+                    labels: {!! json_encode($ekspektasiBiayaCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($ekspektasiBiayaCounts->values()) !!},
+                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartEkspektasiKecepatan"), {
+                type: "pie",
+                data: {
+                    labels: {!! json_encode($ekspektasiKecepatanCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($ekspektasiKecepatanCounts->values()) !!},
+                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartSumberIndihome"), {
+                type: "pie",
+                data: {
+                    labels: {!! json_encode($sumberIndihomeCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($sumberIndihomeCounts->values()) !!},
+                        backgroundColor: [
+                            "#3366CC", "#DC3912", "#FF9900", "#109618",
+                            "#990099", "#0099C6", "#DD4477", "#66AA00"
+                        ]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            new Chart(document.getElementById("chartProviderTerbaik"), {
+                type: "pie",
+                data: {
+                    labels: {!! json_encode($providerTerbaikCounts->keys()) !!},
+                    datasets: [{
+                        data: {!! json_encode($providerTerbaikCounts->values()) !!},
+                        backgroundColor: ["#3366CC", "#DC3912", "#FF9900", "#109618", "#990099", "#0099C6"]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'right' },
+                        datalabels: {
+                            formatter: (value, context) => {
+                                const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = (value / total) * 100;
+                                return percentage >= 10 ? percentage.toFixed(1) + '%' : '';
+                            },
+                            color: '#fff',
+                            font: { weight: 'bold', size: 14 }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+        });
+    </script>
+
+
+    @endif
 
 </x-app-layout>

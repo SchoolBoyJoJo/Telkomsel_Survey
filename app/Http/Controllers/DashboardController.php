@@ -74,29 +74,11 @@ class DashboardController extends Controller
         $sumberIndihomeCounts = $decodedSurveys->pluck('sumber_indihome')->countBy();
         $providerTerbaikCounts = $decodedSurveys->pluck('provider_terbaik')->countBy();
 
-
-
-
-
-
-
-
-
         // Bar chart indihome
         $hematWifiGratisCounts = $decodedSurveys->pluck('hemat_wifi_gratis')->countBy()->sortKeys();
         $ekspektasiTeknisiCounts = $decodedSurveys->pluck('ekspektasi_teknisi')->countBy()->sortKeys();
         $pengaruhTeknisiCounts = $decodedSurveys->pluck('pengaruh_teknisi')->countBy()->sortKeys();
         $sebandingWifiCounts = $decodedSurveys->pluck('sebanding_wifi')->countBy()->sortKeys();
-
-
-
-
-
-
-
-
-
-
 
         // Saran
         $saranTelkomsel = $decodedSurveys
@@ -179,26 +161,6 @@ class DashboardController extends Controller
             'ekspektasiKecepatanCounts' => $ekspektasiKecepatanCounts,
             'sumberIndihomeCounts' => $sumberIndihomeCounts,
             'providerTerbaikCounts' => $providerTerbaikCounts
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
-
-
-
-            
-
         ]);
     }
 
