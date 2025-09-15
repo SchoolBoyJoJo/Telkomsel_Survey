@@ -4,6 +4,7 @@ use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SaranController;
+use App\Http\Controllers\MakeSurveyController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,6 +23,7 @@ Route::post('/template', [SurveyController::class, 'storeTemplate']);
 //Route::post('/saran/summary', [SaranController::class, 'summary'])->name('saran.summary');
 Route::post('/saran/summary-ajax', [SaranController::class, 'summaryAjax'])->name('saran.summary.ajax');
 
+Route::get('/surveys/create', [MakeSurveyController::class, 'create'])->name('surveys.create');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])

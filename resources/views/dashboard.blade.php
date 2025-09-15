@@ -1,9 +1,19 @@
 <x-app-layout>
+    
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Dashboard
-        </h2>
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                Dashboard
+            </h2>
+
+            <!-- Tombol Create New Form -->
+            <a href="{{ route('surveys.create') }}"
+            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+            + Create New Form
+            </a>
+        </div>
     </x-slot>
+
 
     <div class="p-6 text-gray-900">
         {{-- Form Filter dan Download --}}
