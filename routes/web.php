@@ -20,6 +20,17 @@ Route::post('/indihome', [SurveyController::class, 'storeIndihome']);
 Route::get('/template', [SurveyController::class, 'template']);
 Route::post('/template', [SurveyController::class, 'storeTemplate']);
 
+Route::resource('surveys', SurveyController::class);
+
+// Survey publik (tanpa login, tanpa dashboard)
+Route::get('/survey/{id}', [SurveyController::class, 'publicShow'])->name('survey.public.show');
+
+Route::post('/surveys/store-template', [SurveyController::class, 'storeTemplate'])->name('surveys.storeTemplate');
+
+Route::get('/surveys/create', [SurveyController::class, 'create'])->name('surveys.create');
+Route::post('/surveys', [SurveyController::class, 'store'])->name('surveys.store');
+// Route::get('/surveys/{survey}', [SurveyController::class, 'show'])->name('surveys.show');
+
 //Route::post('/saran/summary', [SaranController::class, 'summary'])->name('saran.summary');
 Route::post('/saran/summary-ajax', [SaranController::class, 'summaryAjax'])->name('saran.summary.ajax');
 

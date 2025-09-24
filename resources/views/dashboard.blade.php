@@ -6,14 +6,21 @@
                 Dashboard
             </h2>
 
-            <!-- Tombol Create New Form -->
-            <a href="{{ route('surveys.create') }}"
-            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
-            + Create New Form
-            </a>
+            <div class="flex space-x-3">
+                <!-- Tombol ke Daftar Survey -->
+                <a href="{{ route('surveys.index') }}"
+                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                    📋 Daftar Survey
+                </a>
+
+                <!-- Tombol Create New Form -->
+                <a href="{{ route('surveys.create') }}"
+                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                    + Buat Survey Baru
+                </a>
+            </div>
         </div>
     </x-slot>
-
 
     <div class="p-6 text-gray-900">
         {{-- Form Filter dan Download --}}

@@ -6,42 +6,46 @@
     </x-slot>
 
     <div class="p-6 max-w-3xl mx-auto">
-        <!-- Step 1: Survey Type & Title -->
-        <div class="mb-6">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Survey Type</label>
-            <select name="survey_type" class="block w-full border-gray-300 rounded-md shadow-sm">
-                <option value="" selected disabled>-- Choose a type --</option>
-                <option value="telkomsel">Telkomsel</option>
-                <option value="indihome">IndiHome</option>
-                <option value="template">Template (Custom)</option>
-            </select>
-        </div>
+        <form action="{{ route('surveys.store') }}" method="POST">
+            @csrf
 
-        <div class="mb-6">
-            <label class="block text-sm font-medium text-gray-700">Survey Title</label>
-            <input type="text" name="title"
-                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-        </div>
+            <!-- Step 1: Survey Type & Title -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Survey Type</label>
+                <select name="survey_type" class="block w-full border-gray-300 rounded-md shadow-sm">
+                    <option value="" selected disabled>-- Choose a type --</option>
+                    <option value="telkomsel">Telkomsel</option>
+                    <option value="indihome">IndiHome</option>
+                    <option value="template">Other</option>
+                </select>
+            </div>
 
-        <hr class="my-6">
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700">Survey Title</label>
+                <input type="text" name="title"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+            </div>
 
-        <!-- Step 2: Questions -->
-        <div>
-            <h3 class="font-semibold text-lg mb-4">Questions</h3>
-            <div id="questions-container" class="space-y-6"></div>
+            <hr class="my-6">
 
-            <button type="button" id="add-question"
-                class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                + Add Question
+            <!-- Step 2: Questions -->
+            <div>
+                <h3 class="font-semibold text-lg mb-4">Questions</h3>
+                <div id="questions-container" class="space-y-6"></div>
+
+                <button type="button" id="add-question"
+                    class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                    + Add Question
+                </button>
+            </div>
+
+            <hr class="my-6">
+
+            <button type="submit"
+                class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                Create Survey
             </button>
-        </div>
-
-        <hr class="my-6">
-
-        <button type="submit"
-            class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
-            Save Survey
-        </button>
+        </form>
     </div>
 
     <script>
@@ -52,7 +56,7 @@
             const qIndex = container.children.length;
 
             const block = document.createElement('div');
-            block.className = "p-4 border rounded-md bg-gray-50 space-y-3";
+            block.className = "p-4 border rounded-lg bg-white shadow-sm space-y-3 relative";
 
             block.innerHTML = `
                 <label class="block text-sm font-medium text-gray-700">
@@ -77,18 +81,33 @@
                         Options (comma separated)
                     </label>
                     <input type="text" name="questions[${qIndex}][options]"
-                        class="block w-full border-gray-300 rounded-md shadow-sm">
+                        class="block w-full border-gray-300 rounded-md shadow-sm options-input">
                 </div>
             `;
 
-            // toggle options field jika multiple
+            // Tombol hapus pertanyaan
+            const removeBtn = document.createElement('button');
+            removeBtn.type = "button";
+            removeBtn.className = "absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm";
+            removeBtn.innerText = "Remove";
+            removeBtn.addEventListener('click', () => block.remove());
+            block.appendChild(removeBtn);
+
+            // toggle options
             const typeSelect = block.querySelector('.question-type');
             const optionsContainer = block.querySelector('.options-container');
+            const optionsInput = block.querySelector('.options-input');
+
             typeSelect.addEventListener('change', () => {
                 if (typeSelect.value === 'multiple') {
                     optionsContainer.classList.remove('hidden');
+                    optionsInput.value = "";
+                } else if (typeSelect.value === 'scale') {
+                    optionsContainer.classList.add('hidden');
+                    optionsInput.value = "1,2,3,4,5"; // otomatis isi scale
                 } else {
                     optionsContainer.classList.add('hidden');
+                    optionsInput.value = "";
                 }
             });
 
