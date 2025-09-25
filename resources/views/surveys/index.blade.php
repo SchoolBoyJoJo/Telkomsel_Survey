@@ -35,12 +35,19 @@
                             <td class="px-6 py-4 capitalize text-gray-600">
                                 {{ $survey->survey_type }}
                             </td>
-                            <td class="px-6 py-4 text-center">
+                            <td class="px-6 py-4 text-center flex justify-center gap-2">
+                                <!-- Tombol Lihat -->
                                 <a href="{{ route('survey.public.show', $survey->id) }}" 
                                    class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm shadow"
                                    target="_blank">
-                                    🔗 Lihat
+                                    🔗 Lihat Survey
                                 </a>
+
+                                <!-- Tombol Copy -->
+                                <button onclick="copyLink('{{ route('survey.public.show', $survey->id) }}')" 
+                                    class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-lg text-sm shadow">
+                                    📋 Copy Link
+                                </button>
                             </td>
                         </tr>
                     @empty
@@ -54,4 +61,15 @@
             </table>
         </div>
     </div>
+
+    <!-- Script Copy Link -->
+    <script>
+        function copyLink(link) {
+            navigator.clipboard.writeText(link).then(() => {
+                alert("✅ Link survey berhasil disalin!");
+            }).catch(err => {
+                console.error("Gagal menyalin link: ", err);
+            });
+        }
+    </script>
 </x-app-layout>

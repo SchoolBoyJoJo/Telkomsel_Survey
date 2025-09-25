@@ -28,6 +28,8 @@ class SurveyController extends Controller
             'questions.*.text' => 'required|string',
             'questions.*.type' => 'required|string',
             'questions.*.options' => 'nullable|string',
+            'questions.*.left_label' => 'nullable|string',
+            'questions.*.right_label' => 'nullable|string',
         ]);
 
         // 1. Simpan survey utama
@@ -38,10 +40,20 @@ class SurveyController extends Controller
 
         // 2. Simpan pertanyaan
         foreach ($validated['questions'] as $q) {
+            $options = null;
+
+            if ($q['type'] === 'multiple') {
+                $options = $q['options'] ?? null;
+            } elseif ($q['type'] === 'scale') {
+                $left = $q['left_label'] ?? '';
+                $right = $q['right_label'] ?? '';
+                $options = $left . '|' . $right; // simpan sebagai string "Left|Right"
+            }
+
             $survey->questions()->create([
                 'text' => $q['text'],
                 'type' => $q['type'],
-                'options' => $q['options'] ?? null,
+                'options' => $options,
             ]);
         }
 

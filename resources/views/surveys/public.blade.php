@@ -148,15 +148,29 @@
             </label>`;
         });
         } else if (step.type === 'scale') {
-            // ---- Skala 1 - 5
-            html += `<div class="flex justify-between">`;
-            for (let i=1; i<=5; i++) {
+            // ---- Skala 1 - 5 dengan label kiri-kanan
+            let labels = step.options ? step.options.split('|') : ['', ''];
+            let leftLabel = labels[0] || '';
+            let rightLabel = labels[1] || '';
+
+            html += `
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm text-gray-600">${leftLabel}</span>
+                    <span class="text-sm text-gray-600">${rightLabel}</span>
+                </div>
+                <div class="flex justify-between">
+            `;
+
+            for (let i = 1; i <= 5; i++) {
                 html += `
                 <label class="flex flex-col items-center">
-                    <input type="radio" name="q_${step.id}" value="${i}" class="accent-red-500 w-6 h-6" ${answers["q_"+step.id]==i?'checked':''}>
+                    <input type="radio" name="q_${step.id}" value="${i}" 
+                        class="accent-red-500 w-6 h-6" 
+                        ${answers["q_"+step.id]==i?'checked':''}>
                     <span class="text-sm mt-1">${i}</span>
                 </label>`;
             }
+
             html += `</div>`;
         } else {
             // ---- Input Text

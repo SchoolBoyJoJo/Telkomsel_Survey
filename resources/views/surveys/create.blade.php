@@ -76,12 +76,26 @@
                     <option value="scale">Scale (1-5)</option>
                 </select>
 
-                <div class="options-container hidden">
+                <!-- multiple options -->
+                <div class="options-container hidden mt-3">
                     <label class="block text-sm font-medium text-gray-700">
                         Options (comma separated)
                     </label>
                     <input type="text" name="questions[${qIndex}][options]"
                         class="block w-full border-gray-300 rounded-md shadow-sm options-input">
+                </div>
+
+                <!-- scale labels -->
+                <div class="scale-container hidden mt-3 space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Scale Labels</label>
+                    <div class="flex gap-4">
+                        <input type="text" name="questions[${qIndex}][left_label]"
+                            placeholder="Left label (e.g. Sangat Buruk)"
+                            class="block w-1/2 border-gray-300 rounded-md shadow-sm scale-left">
+                        <input type="text" name="questions[${qIndex}][right_label]"
+                            placeholder="Right label (e.g. Sangat Baik)"
+                            class="block w-1/2 border-gray-300 rounded-md shadow-sm scale-right">
+                    </div>
                 </div>
             `;
 
@@ -93,21 +107,23 @@
             removeBtn.addEventListener('click', () => block.remove());
             block.appendChild(removeBtn);
 
-            // toggle options
+            // toggle options/scale
             const typeSelect = block.querySelector('.question-type');
             const optionsContainer = block.querySelector('.options-container');
+            const scaleContainer = block.querySelector('.scale-container');
             const optionsInput = block.querySelector('.options-input');
 
             typeSelect.addEventListener('change', () => {
                 if (typeSelect.value === 'multiple') {
                     optionsContainer.classList.remove('hidden');
+                    scaleContainer.classList.add('hidden');
                     optionsInput.value = "";
                 } else if (typeSelect.value === 'scale') {
                     optionsContainer.classList.add('hidden');
-                    optionsInput.value = "1,2,3,4,5"; // otomatis isi scale
+                    scaleContainer.classList.remove('hidden');
                 } else {
                     optionsContainer.classList.add('hidden');
-                    optionsInput.value = "";
+                    scaleContainer.classList.add('hidden');
                 }
             });
 
