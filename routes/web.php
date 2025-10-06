@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SaranController;
 use App\Http\Controllers\MakeSurveyController;
 use Illuminate\Support\Facades\Route;
+use Vinkla\Hashids\Facades\Hashids;
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,16 +23,30 @@ Route::post('/template', [SurveyController::class, 'storeTemplate']);
 
 Route::resource('surveys', SurveyController::class);
 
-// Survey publik (tanpa login, tanpa dashboard)
-Route::get('/survey/{id}', [SurveyController::class, 'publicShow'])->name('survey.public.show');
+// 🧩 Ganti route publik agar pakai hash
+Route::get('/survey/{hash}', function ($hash) {
+    $decoded = Hashids::decode($hash);
+    $id = $decoded[0] ?? null;
+
+    abort_unless($id, 404);
+
+    return app(SurveyController::class)->publicShow($id);
+})->name('survey.public.show');
+
+Route::post('/survey/{hash}/dynamic-submit', function ($hash, \Illuminate\Http\Request $request) {
+    $decoded = Hashids::decode($hash);
+    $id = $decoded[0] ?? null;
+
+    abort_unless($id, 404);
+
+    return app(SurveyController::class)->storeDynamicAnswer($request, $id);
+})->name('survey.dynamic.store');
 
 Route::post('/surveys/store-template', [SurveyController::class, 'storeTemplate'])->name('surveys.storeTemplate');
 
 Route::get('/surveys/create', [SurveyController::class, 'create'])->name('surveys.create');
 Route::post('/surveys', [SurveyController::class, 'store'])->name('surveys.store');
-// Route::get('/surveys/{survey}', [SurveyController::class, 'show'])->name('surveys.show');
 
-//Route::post('/saran/summary', [SaranController::class, 'summary'])->name('saran.summary');
 Route::post('/saran/summary-ajax', [SaranController::class, 'summaryAjax'])->name('saran.summary.ajax');
 
 Route::get('/surveys/create', [MakeSurveyController::class, 'create'])->name('surveys.create');
@@ -49,8 +64,5 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-Route::post('/survey/{id}/dynamic-submit', [SurveyController::class, 'storeDynamicAnswer'])
-    ->name('survey.dynamic.store');
 
 require __DIR__.'/auth.php';

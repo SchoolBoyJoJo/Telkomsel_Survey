@@ -67,6 +67,10 @@
     </div>
 </div>
 
+@php
+    $hash = Hashids::encode($survey->id);
+@endphp
+
 <script>
     // ========== Survey Steps ==========
     window.steps = @json($steps);
@@ -230,7 +234,7 @@
 
             console.log("Jawaban semua:", answers);
             // --- TODO: fetch POST ke server untuk simpan jawaban ---
-            fetch(`/survey/{{ $survey->id }}/dynamic-submit`, {
+            fetch(`/survey/{{ $hash }}/dynamic-submit`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

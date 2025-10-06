@@ -36,15 +36,20 @@
                                 {{ $survey->survey_type }}
                             </td>
                             <td class="px-6 py-4 text-center flex justify-center gap-2">
+
+                                @php
+                                    $hash = Hashids::encode($survey->id);
+                                @endphp
+
                                 <!-- Tombol Lihat -->
-                                <a href="{{ route('survey.public.show', $survey->id) }}" 
-                                   class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm shadow"
-                                   target="_blank">
+                                <a href="{{ route('survey.public.show', $hash) }}" 
+                                class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm shadow"
+                                target="_blank">
                                     🔗 Lihat Survey
                                 </a>
 
                                 <!-- Tombol Copy -->
-                                <button onclick="copyLink('{{ route('survey.public.show', $survey->id) }}')" 
+                                <button onclick="copyLink('{{ route('survey.public.show', $hash) }}')" 
                                     class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-lg text-sm shadow">
                                     📋 Copy Link
                                 </button>
