@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Survey;
 use App\Models\Question;
 use App\Models\SurveyAnswer;
+use App\Models\DynamicSurveyAnswer;
 
 class SurveyController extends Controller
 {
@@ -136,4 +137,18 @@ class SurveyController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function storeDynamicAnswer(Request $request, $id)
+    {
+        $survey = Survey::findOrFail($id);
+
+        DynamicSurveyAnswer::create([
+            'survey_id'   => $survey->id,
+            'survey_type' => $survey->survey_type,
+            'answers'     => json_encode($request->all()),
+        ]);
+
+        return response()->json(['success' => true]);
+    }
+    
 }

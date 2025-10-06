@@ -50,4 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::post('/survey/{id}/dynamic-submit', [SurveyController::class, 'storeDynamicAnswer'])
+    ->name('survey.dynamic.store');
+
 require __DIR__.'/auth.php';

@@ -228,6 +228,19 @@
 
             console.log("Jawaban semua:", answers);
             // --- TODO: fetch POST ke server untuk simpan jawaban ---
+            fetch(`/survey/{{ $survey->id }}/dynamic-submit`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify(answers)
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log("Respon server:", data);
+            })
+            .catch(err => console.error("Error simpan survey:", err));
         }
     });
 
