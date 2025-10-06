@@ -21,7 +21,9 @@
         <div id="welcome" class="flex flex-col items-center justify-center py-20 px-8 fade-in">
             <img src="{{ asset('img/logo_telkom.png') }}" alt="Telkomsel Logo" class="w-24 h-24 mb-6">
             <div class="text-3xl font-bold text-red-600 mb-3">Selamat Datang!</div>
-            <div class="text-gray-700 text-lg text-center mb-8">Terima kasih atas waktu Anda.<br>Mohon luangkan beberapa menit untuk mengisi survey pengalaman Anda bersama Telkomsel.</div>
+            <div class="text-gray-700 text-lg text-center mb-8">
+                {{ $survey->description ?? 'Terima kasih atas waktu Anda. Mohon luangkan beberapa menit untuk mengisi survey pengalaman Anda bersama Telkomsel.' }}
+            </div>
             <button id="startSurveyBtn" class="bg-red-500 hover:bg-red-600 text-white font-semibold px-8 py-3 rounded-2xl shadow transition text-lg">Mulai</button>
         </div>
 

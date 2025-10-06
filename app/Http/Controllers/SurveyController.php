@@ -25,6 +25,7 @@ class SurveyController extends Controller
         $validated = $request->validate([
             'survey_type' => 'required|string',
             'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'questions' => 'required|array',
             'questions.*.text' => 'required|string',
             'questions.*.type' => 'required|string',
@@ -37,6 +38,7 @@ class SurveyController extends Controller
         $survey = Survey::create([
             'survey_type' => $validated['survey_type'],
             'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
         ]);
 
         // 2. Simpan pertanyaan
@@ -150,5 +152,5 @@ class SurveyController extends Controller
 
         return response()->json(['success' => true]);
     }
-    
+
 }

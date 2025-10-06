@@ -26,7 +26,13 @@
                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
             </div>
 
-            <hr class="my-6">
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700">Survey Description</label>
+                <textarea name="description"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                    rows="3"
+                    placeholder="Tuliskan deskripsi survey..."></textarea>
+            </div>
 
             <!-- Step 2: Questions -->
             <div>
