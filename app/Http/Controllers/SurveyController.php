@@ -89,6 +89,123 @@ class SurveyController extends Controller
         return view('surveys.public', compact('survey', 'steps'));
     }
 
+    public function showResults($id)
+    {
+        $survey = Survey::with('questions')->findOrFail($id);
+        $answers = DynamicSurveyAnswer::where('survey_id', $id)->get();
+
+        // decode semua jawaban dari JSON
+        $decodedAnswers = $answers->map(function ($a) {
+            return json_decode($a->answers, true) ?: [];
+        })->filter()->values();
+
+        $respondentCount = $decodedAnswers->count();
+
+        // index pertanyaan berdasarkan id
+        $questionsById = $survey->questions->keyBy('id');
+
+        // inisialisasi variabel
+        $ageCounts = [];
+        $chartsMap = [];
+        $textAnswers = [];
+
+        // --- 1) Inisialisasi berdasarkan tipe pertanyaan ---
+        foreach ($questionsById as $qid => $q) {
+            $label = $q->text;
+
+            if (in_array($q->type, ['input', 'textarea'])) {
+                // jawaban teks terbuka
+                $textAnswers[$label] = [];
+            } else {
+                // tentukan jenis chart
+                $chartType = $q->type === 'scale' ? 'bar' : 'pie';
+                $chartsMap[$label] = [
+                    'type' => $chartType,
+                    'counts' => []
+                ];
+
+                // ✅ Inisialisasi opsi multiple choice agar selalu tampil di chart
+                if ($q->type === 'multiple' && !empty($q->options)) {
+                    // asumsikan opsi disimpan dipisah dengan koma
+                    $options = array_map('trim', explode(',', $q->options));
+                    foreach ($options as $opt) {
+                        if ($opt !== '') {
+                            $chartsMap[$label]['counts'][$opt] = 0;
+                        }
+                    }
+                }
+
+                // ✅ Inisialisasi skala 1–5 agar selalu tampil di chart
+                if ($q->type === 'scale') {
+                    for ($i = 1; $i <= 5; $i++) {
+                        $chartsMap[$label]['counts'][(string)$i] = 0;
+                    }
+                }
+            }
+        }
+
+        // --- 2) Agregasi jawaban responden ---
+        foreach ($decodedAnswers as $entry) {
+            foreach ($entry as $key => $val) {
+                // tangani data usia
+                if ($key === 'usia' && is_numeric($val)) {
+                    $ageCounts[$val] = ($ageCounts[$val] ?? 0) + 1;
+                    continue;
+                }
+
+                // hanya proses pertanyaan valid
+                if (str_starts_with($key, 'q_')) {
+                    $qid = (int) substr($key, 2);
+                    if (!isset($questionsById[$qid])) continue;
+
+                    $q = $questionsById[$qid];
+                    $label = $q->text;
+
+                    if (in_array($q->type, ['input', 'textarea'])) {
+                        // tambahkan jawaban teks
+                        $textAnswers[$label][] = (string) $val;
+                    } else {
+                        // tambahkan jumlah jawaban untuk opsi terkait
+                        $chartsMap[$label]['counts'][$val] = ($chartsMap[$label]['counts'][$val] ?? 0) + 1;
+                    }
+                }
+            }
+        }
+
+        // --- 3) Siapkan data usia ---
+        if (!empty($ageCounts)) {
+            ksort($ageCounts, SORT_NUMERIC);
+        }
+        $ageLabels = array_keys($ageCounts);
+        $ageData = array_values($ageCounts);
+
+        // --- 4) Ubah struktur chartsMap menjadi array chart siap pakai ---
+        $charts = [];
+        foreach ($chartsMap as $question => $info) {
+            $counts = $info['counts'];
+
+            // tetap tampilkan meskipun semua 0
+            if ($info['type'] === 'bar') {
+                ksort($counts, SORT_NUMERIC);
+            } else {
+                arsort($counts);
+            }
+
+            $charts[] = [
+                'question' => $question,
+                'type'     => $info['type'],
+                'labels'   => array_keys($counts),
+                'data'     => array_values($counts),
+            ];
+        }
+
+        // --- 5) Kirim data ke view ---
+        return view('surveys.results', compact(
+            'survey', 'charts', 'textAnswers',
+            'respondentCount', 'ageLabels', 'ageData'
+        ));
+    }
+
     /**
      * ==============================
      * USER SIDE: JAWAB SURVEY
@@ -142,9 +259,14 @@ class SurveyController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function storeDynamicAnswer(Request $request, $id)
+    public function storeDynamicAnswer(Request $request, $hash)
     {
-        $survey = Survey::findOrFail($id);
+        $decoded = Hashids::decode($hash);
+        $surveyId = $decoded[0] ?? null;
+
+        abort_unless($surveyId, 404);
+
+        $survey = Survey::findOrFail($surveyId);
 
         DynamicSurveyAnswer::create([
             'survey_id'   => $survey->id,
@@ -153,22 +275,6 @@ class SurveyController extends Controller
         ]);
 
         return response()->json(['success' => true]);
-    }
-
-    public function showResults($id)
-    {
-        $survey = Survey::findOrFail($id);
-
-        // Ambil semua jawaban dari tabel DynamicSurveyAnswer
-        $answers = \App\Models\DynamicSurveyAnswer::where('survey_id', $id)->get();
-
-        // Decode semua jawaban JSON ke array
-        $decodedAnswers = $answers->map(function ($item) {
-            return json_decode($item->answers, true);
-        });
-
-        // Kirim ke view
-        return view('surveys.results', compact('survey', 'decodedAnswers'));
     }
 
 

@@ -33,14 +33,8 @@ Route::get('/survey/{hash}', function ($hash) {
     return app(SurveyController::class)->publicShow($id);
 })->name('survey.public.show');
 
-Route::post('/survey/{hash}/dynamic-submit', function ($hash, \Illuminate\Http\Request $request) {
-    $decoded = Hashids::decode($hash);
-    $id = $decoded[0] ?? null;
-
-    abort_unless($id, 404);
-
-    return app(SurveyController::class)->storeDynamicAnswer($request, $id);
-})->name('survey.dynamic.store');
+Route::post('/survey/{hash}/dynamic-submit', [SurveyController::class, 'storeDynamicAnswer'])
+    ->name('survey.dynamic.store');
 
 Route::post('/surveys/store-template', [SurveyController::class, 'storeTemplate'])->name('surveys.storeTemplate');
 

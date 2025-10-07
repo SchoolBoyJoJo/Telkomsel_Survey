@@ -174,19 +174,22 @@
                 <div class="flex flex-col gap-4">
         `;
 
-       if ((step.type === 'radio' || step.type === 'multiple') && step.options) {
-        // ---- Single Option (Radio)
-        let opts = step.options.split(',');
-        const saved = answers["q_" + step.id] || '';
-        opts.forEach(opt => {
-            opt = opt.trim();
-            html += `
-            <label class="flex items-center gap-3 py-3 px-4 rounded-2xl border border-gray-200 hover:border-red-400 transition cursor-pointer bg-gray-50">
-                <input type="radio" name="q_${step.id}" value="${opt}" class="accent-red-500 w-6 h-6" ${saved === opt ? 'checked' : ''}>
-                <span class="text-lg">${opt}</span>
-            </label>`;
-        });
-        } else if (step.type === 'scale') {
+        // --- Multiple Choice (Radio Style)
+        if (step.type === 'multiple' && step.options) {
+            let opts = step.options.split(',');
+            const saved = answers["q_" + step.id] || '';
+            html += `<div class="space-y-3">`;
+            opts.forEach(opt => {
+                opt = opt.trim();
+                html += `
+                <label class="flex items-center gap-3 py-3 px-4 rounded-2xl border border-gray-200 hover:border-red-400 transition cursor-pointer bg-gray-50">
+                    <input type="radio" name="q_${step.id}" value="${opt}" class="accent-red-500 w-6 h-6" ${saved === opt ? 'checked' : ''}>
+                    <span class="text-lg">${opt}</span>
+                </label>`;
+            });
+            html += `</div>`;
+        }
+        else if (step.type === 'scale') {
             // ---- Skala 1 - 5 dengan label kiri-kanan
             let labels = step.options ? step.options.split('|') : ['', ''];
             let leftLabel = labels[0] || '';
@@ -235,17 +238,21 @@
         const inputName = "q_" + step.id;
         let value = "";
 
-        if (step.type === "radio" || step.type === "scale") {
+        // 🔹 Baca nilai sesuai tipe pertanyaan
+        if (step.type === "multiple" || step.type === "scale") {
+            // untuk pertanyaan pilihan tunggal / skala
             const checked = document.querySelector(`input[name="${inputName}"]:checked`);
             value = checked ? checked.value : "";
         } else if (step.type === "textarea") {
             const input = document.querySelector(`textarea[name="${inputName}"]`);
             value = input ? input.value.trim() : "";
         } else {
+            // default untuk input teks biasa
             const input = document.querySelector(`input[name="${inputName}"]`);
             value = input ? input.value.trim() : "";
         }
 
+        // 🔹 Validasi jika belum diisi
         if (!value) {
             stepContent.firstElementChild.classList.remove('show');
             setTimeout(() => stepContent.firstElementChild.classList.add('show'), 100);
@@ -254,19 +261,22 @@
             return;
         }
 
+        // 🔹 Simpan jawaban ke objek
         answers[inputName] = value;
 
+        // 🔹 Jika masih ada step berikutnya, lanjut
         if (currentStep < steps.length - 1) {
             currentStep++;
             renderStep();
         } else {
+            // 🔹 Kalau sudah step terakhir → kirim ke server
             surveyForm.classList.add('hidden');
             surveyForm.style.display = 'none';
             thankyou.classList.remove('hidden');
             setTimeout(() => thankyou.classList.add('show'), 20);
 
             console.log("Jawaban semua:", answers);
-            // --- TODO: fetch POST ke server untuk simpan jawaban ---
+
             fetch(`/survey/{{ $hash }}/dynamic-submit`, {
                 method: "POST",
                 headers: {
@@ -275,11 +285,17 @@
                 },
                 body: JSON.stringify(answers)
             })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error("Gagal kirim data ke server");
+                return res.json();
+            })
             .then(data => {
                 console.log("Respon server:", data);
             })
-            .catch(err => console.error("Error simpan survey:", err));
+            .catch(err => {
+                console.error("Error simpan survey:", err);
+                alert("Terjadi kesalahan saat menyimpan jawaban. Silakan coba lagi.");
+            });
         }
     });
 
