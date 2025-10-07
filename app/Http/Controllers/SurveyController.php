@@ -7,6 +7,7 @@ use App\Models\Survey;
 use App\Models\Question;
 use App\Models\SurveyAnswer;
 use App\Models\DynamicSurveyAnswer;
+use Vinkla\Hashids\Facades\Hashids;
 
 class SurveyController extends Controller
 {
@@ -39,6 +40,7 @@ class SurveyController extends Controller
             'survey_type' => $validated['survey_type'],
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
+            'hash' => Hashids::encode(time()),
         ]);
 
         // 2. Simpan pertanyaan
@@ -152,5 +154,22 @@ class SurveyController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function showResults($id)
+    {
+        $survey = Survey::findOrFail($id);
+
+        // Ambil semua jawaban dari tabel DynamicSurveyAnswer
+        $answers = \App\Models\DynamicSurveyAnswer::where('survey_id', $id)->get();
+
+        // Decode semua jawaban JSON ke array
+        $decodedAnswers = $answers->map(function ($item) {
+            return json_decode($item->answers, true);
+        });
+
+        // Kirim ke view
+        return view('surveys.results', compact('survey', 'decodedAnswers'));
+    }
+
 
 }

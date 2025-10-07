@@ -57,6 +57,13 @@
                                     class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-lg text-sm shadow">
                                     📋 Copy Link
                                 </button>
+
+                                <!-- Tombol Lihat Hasil -->
+                                <a href="{{ route('surveys.results', $survey->id) }}"
+                                class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-sm shadow">
+                                    📊 Lihat Hasil
+                                </a>
+                                
                             </td>
                         </tr>
                     @empty

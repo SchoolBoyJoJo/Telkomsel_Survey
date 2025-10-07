@@ -46,6 +46,16 @@
             <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold px-8 py-3 rounded-2xl shadow transition text-lg w-full">Lanjut</button>
         </form>
 
+        <!-- Age Form -->
+        <form id="ageForm" class="flex flex-col justify-center items-center px-8 py-16 fade-in" style="display:none;">
+            <div class="text-2xl font-bold text-gray-800 mb-8 text-center">Masukkan Usia Anda</div>
+            <input type="number" id="usia" name="usia" min="10" max="100" placeholder="Contoh: 25" required
+                class="w-full px-5 py-3 rounded-xl border border-gray-300 focus:border-red-500 focus:outline-none text-lg mb-6 transition-all">
+            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold px-8 py-3 rounded-2xl shadow transition text-lg w-full">
+                Lanjut
+            </button>
+        </form>
+
         <!-- Steps -->
         <form id="surveyForm" class="flex-1 flex flex-col justify-center items-center px-8 pb-12 relative overflow-y-auto" style="display:none;">
             <div id="step-content" class="w-full"></div>
@@ -118,6 +128,29 @@
         phoneForm.classList.remove('show');
         setTimeout(() => {
             phoneForm.style.display = 'none';
+            ageForm.style.display = 'flex';
+            setTimeout(() => ageForm.classList.add('show'), 20);
+        }, 400);
+    });
+
+    // ========== Age Form Logic ==========
+    const ageForm = document.getElementById('ageForm');
+    const usiaInput = document.getElementById('usia');
+
+    ageForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const usia = parseInt(usiaInput.value.trim());
+        if (isNaN(usia) || usia < 10 || usia > 100) {
+            usiaInput.classList.add('ring-2', 'ring-red-300');
+            setTimeout(() => usiaInput.classList.remove('ring-2', 'ring-red-300'), 700);
+            usiaInput.focus();
+            return;
+        }
+        answers['usia'] = usia;
+
+        ageForm.classList.remove('show');
+        setTimeout(() => {
+            ageForm.style.display = 'none';
             progressContainer.style.display = '';
             surveyForm.style.display = 'flex';
             renderStep();
