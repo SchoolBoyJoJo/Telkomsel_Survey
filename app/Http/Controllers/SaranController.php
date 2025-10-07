@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use OpenAI\Laravel\Facades\OpenAI;
 
 class SaranController extends Controller
 {
@@ -18,29 +18,46 @@ class SaranController extends Controller
             ]);
         }
 
-        // Gabungkan semua saran
-        $text = implode("\n", $sarans);
+        $text = implode("\n- ", $sarans);
 
-        $apiKey = env('GEMINI_API_KEY');
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'X-goog-api-key' => $apiKey,
-        ])->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent', [
-            'contents' => [
-                [
-                    'parts' => [
-                        ['text' => "Dari saran dan keluhan yang diberikan oleh pelanggan, berikan kesimpulan supaya kedepannya saya bisa menjadi lebih baik:\n{$text}"]
-                    ]
-                ]
-            ]
-        ]);
+        try {
+            $response = OpenAI::chat()->create([
+                'model' => 'gpt-5-mini',
+                'messages' => [
+                    [
+                        'role' => 'system',
+                        'content' => 'Kamu adalah asisten profesional yang bertugas meringkas saran pelanggan dengan jelas dan positif dalam point-point penting (misal 1, 2, 3, dst).'
+                    ],
+                    [
+                        'role' => 'user',
+                        'content' => "Buat ringkasan dalam point-point penting (misal 1, 2, 3, dst) dan positif dari daftar saran berikut :\n\n" 
+                                    . implode("\n- ", array_slice($sarans, 0, 100))
+                    ],
+                ],
+                'max_completion_tokens' => 1000, 
+            ]);
 
-        if ($response->successful()) {
-            $rawSummary = $response->json()['candidates'][0]['content']['parts'][0]['text'] ?? 'Ringkasan tidak tersedia.';
-            $summary = Str::markdown($rawSummary);
-        } else {
-            $summary = '<p class="text-red-500">Gagal mengambil ringkasan dari API.</p>';
+            // 🪵 Tambahkan log isi full response
+            \Log::info('OpenAI summary response:', [
+                'raw' => $response->toArray(),
+            ]);
+
+            $rawSummary = $response->choices[0]->message->content ?? null;
+
+            if (!$rawSummary) {
+                $summary = '<p class="text-red-500">AI tidak mengembalikan teks ringkasan.</p>';
+            } else {
+                $summary = Str::markdown($rawSummary);
+            }
+
+        } catch (\Exception $e) {
+            \Log::error('Gagal summary OpenAI:', [
+                'error' => $e->getMessage(),
+            ]);
+
+            $summary = '<p class="text-red-500">Gagal mengambil ringkasan dari API OpenAI GPT-5-mini.</p>';
         }
+
 
         return response()->json(['summary' => $summary]);
     }
