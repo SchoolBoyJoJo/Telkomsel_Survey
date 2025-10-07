@@ -15,4 +15,9 @@ class Survey extends Model
     {
         return $this->hasMany(Question::class);
     }
+
+    public function dynamicAnswers()
+    {
+        return $this->hasMany(DynamicSurveyAnswer::class, 'survey_id');
+    }
 }

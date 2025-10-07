@@ -66,7 +66,7 @@ class SurveyController extends Controller
 
     public function index()
     {
-        $surveys = Survey::with('questions')->get();
+        $surveys = Survey::withCount('dynamicAnswers')->get();
         return view('surveys.index', compact('surveys')); //survey list
     }
 

@@ -31,6 +31,10 @@
                         <tr class="border-b hover:bg-gray-50">
                             <td class="px-6 py-4 text-gray-800 font-medium">
                                 {{ $survey->title }}
+                                <div class="flex items-center text-gray-600 text-sm mt-1">
+                                    <span class="text-lg mr-1">👥</span>
+                                    <span>{{ $survey->dynamic_answers_count }} responden</span>
+                                </div>
                             </td>
                             <td class="px-6 py-4 capitalize text-gray-600">
                                 {{ $survey->survey_type }}
@@ -45,7 +49,7 @@
                                 <a href="{{ route('survey.public.show', $hash) }}" 
                                 class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm shadow"
                                 target="_blank">
-                                    🔗 Lihat Survey
+                                    🔗 Go To Survey
                                 </a>
 
                                 <!-- Tombol Copy -->
