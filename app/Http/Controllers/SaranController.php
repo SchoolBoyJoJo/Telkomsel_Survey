@@ -34,7 +34,7 @@ class SaranController extends Controller
                                     . implode("\n- ", array_slice($sarans, 0, 100))
                     ],
                 ],
-                'max_completion_tokens' => 1000, 
+                'max_completion_tokens' => 10000, 
             ]);
 
             // 🪵 Tambahkan log isi full response
